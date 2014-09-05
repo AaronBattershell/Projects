@@ -25,7 +25,7 @@ int main() {
 	srand(time(0));
 
 	for (int i = 2; i <= 35; ++i) {
-		fstream out ("map_"+to_string(i)+".txt", fstream::out);
+		fstream out ("../maps/map_"+to_string(i)+".txt", fstream::out);
 
 		out << i << endl;
 		for (int n = 0; n < i;  ++n) {
@@ -37,6 +37,6 @@ int main() {
 		out.close();
 	}
 
-	cout << "New files have been created and stored in the working directory." << endl;
+	cout << "New files have been created and stored in the maps directory." << endl;
 	return 0;
 }
