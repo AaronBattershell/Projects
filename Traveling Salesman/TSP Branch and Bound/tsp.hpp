@@ -15,8 +15,7 @@
 class tsp {
 	private:
 		node *head, *endPtr;
-		int nodes,
-			bestLowerBound;
+		int nodes, bestLowerBound;
 
 		void addChildren(node *);
 		void calcShortestPath();
@@ -30,7 +29,7 @@ class tsp {
 		bool noPossibleChildren(node *);    
 		void printGrid(node *);
 		void printTree(node *, int = 0);
-		void pruneBranches(node *);			// Needs checked - Does it delete only leafNodes? Does it delete high branches with artificialy low lowerBounds?
+		void pruneBranches(node *);
 
 	public:
 		tsp(std::string);
