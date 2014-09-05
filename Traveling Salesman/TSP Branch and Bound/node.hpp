@@ -6,8 +6,7 @@
 
 class node {
 	public:
-		int id,
-			lowerBound;
+		int id, lowerBound;
 		bool bad;
 		std::vector<int> conn;
 		std::vector<std::vector<int> > grid;
