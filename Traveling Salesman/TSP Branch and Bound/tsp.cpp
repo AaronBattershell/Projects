@@ -5,8 +5,8 @@
 /	Reads in grid data from a file specified by the user and assigns values
 /   to the head node.
 */
-tsp::tsp(std::string filePath) : bestLowerBound(1000000000), head(new node) {
-	std::fstream in (filePath.c_str(), std::fstream::in);
+tsp::tsp(std::string nodeCount) : bestLowerBound(ndef), head(new node) {
+	std::fstream in (("../maps/map_"+nodeCount+".txt").c_str(), std::fstream::in);
 
 	// Check if the file was found
 	if (!in.is_open()) {
@@ -182,7 +182,7 @@ node* tsp::getLowestBoundedNode(node *nodePtr) {
 	// Iterate through all children, getting the one with the lowest bound
 	for (++iter; iter != nodePtr->children.end(); ++iter) {
 		node *tempResult = getLowestBoundedNode(iter->second);
-		if (minNode->lowerBound > tempResult->lowerBound && tempResult != nodePtr) { //DOUBEL CHECK THISSSSSSSSSSSSSSSSSSSSSSSSSSSSSS
+		if (minNode->lowerBound > tempResult->lowerBound && tempResult != nodePtr) {
 			minNode = tempResult;
 		}
 	}
@@ -238,7 +238,7 @@ bool tsp::noPossibleChildren(node *nodePtr) {
 void tsp::pruneBranches(node *nodePtr) {
 	std::vector<int> toDelete;
 	for (auto &iter : nodePtr->children) {
-		if ((iter.second->lowerBound >= bestLowerBound && iter.second != endPtr && isLeafNode(iter.second)) || iter.second->bad) { // If to high and not last node
+		if ((iter.second->lowerBound >= bestLowerBound && iter.second != endPtr && isLeafNode(iter.second)) || iter.second->bad) {
 			toDelete.push_back(iter.second->id);
 			deleteTree(iter.second);
 			continue;
