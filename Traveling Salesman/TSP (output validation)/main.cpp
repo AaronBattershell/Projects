@@ -13,13 +13,14 @@ using namespace std;
 / an upper limit of ~11 nodes to a data set that should be
 / tested against it.
 /
-/ Input is specified via the command line. This file expects a
-/ single string, the name of the file to read from. 
+/ Input is specified via the command line. This file expects
+/ a single integer, the number of nodes wanted to run a test
+/ on. 
 */
 
 int main(int argc, char** argl) {
 	if (argc != 2) {
-		cout << "Invalid Input : string argument expected" << endl;
+		cout << "Invalid Input : integer argument expected" << endl;
 		exit(1);
 	}
 
@@ -29,7 +30,7 @@ int main(int argc, char** argl) {
 	int dim, minPathCost = 100000000;
 
 	/* Open the file specified by the user */
-	fstream in (argl[1], fstream::in);
+	fstream in (("../maps/map_" + static_cast<string>(argl[1]) + ".txt").c_str(), fstream::in);
 	if (!in.is_open()) {
 		cout << "File not found!" << endl;
 		exit(2);
