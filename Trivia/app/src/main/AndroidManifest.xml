@@ -21,6 +21,18 @@
             android:label="Triva"
             android:theme="@style/AppTheme" >
         </activity>
+
+        <activity
+            android:name=".SpinnerQuestionActivity"
+            android:label="Triva"
+            android:theme="@style/AppTheme" >
+        </activity>
+
+        <activity
+            android:name="displayResults"
+            android:label="Triva"
+            android:theme="@style/AppTheme" >
+        </activity>
     </application>
 
 </manifest>
