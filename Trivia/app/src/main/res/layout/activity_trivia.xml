@@ -9,8 +9,31 @@
     tools:context=".Trivia">
 
     <TextView
-        android:text="@string/hello_world"
+        android:text="@string/title"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="false"
+        android:layout_alignParentLeft="false"
+        android:layout_centerHorizontal="true"
+        android:textSize="52px"
+        android:id="@+id/textView" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Start Test Activity"
+        android:id="@+id/testButton"
+        android:layout_marginTop="29dp"
+        android:layout_below="@+id/userScore"
+        android:layout_centerHorizontal="true" />
+
+    <TextView
+        android:layout_width="fill_parent"
+        android:layout_height="80px"
+        android:id="@+id/userScore"
+        android:layout_marginTop="25dp"
+        android:layout_below="@+id/textView"
+        android:layout_centerHorizontal="true"
+        android:autoText="false" />
 
 </RelativeLayout>

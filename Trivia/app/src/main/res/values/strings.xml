@@ -2,7 +2,7 @@
 <resources>
 
     <string name="app_name">Trivia</string>
-    <string name="hello_world">Hello world!</string>
+    <string name="title">Generic App Title!</string>
     <string name="action_settings">Settings</string>
 
 </resources>
