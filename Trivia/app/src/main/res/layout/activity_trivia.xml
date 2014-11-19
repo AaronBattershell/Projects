@@ -21,8 +21,8 @@
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Start Test Activity"
-        android:id="@+id/testButton"
+        android:text="Start Radio Button Activity"
+        android:id="@+id/testRadioButton"
         android:layout_marginTop="29dp"
         android:layout_below="@+id/userScore"
         android:layout_centerHorizontal="true" />
@@ -35,5 +35,23 @@
         android:layout_below="@+id/textView"
         android:layout_centerHorizontal="true"
         android:autoText="false" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Start Spinner Acivity"
+        android:id="@+id/testSpinnerButton"
+        android:layout_below="@+id/testRadioButton"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="25dp" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Start Second Spinner Activity"
+        android:id="@+id/testSpinnerButton2"
+        android:layout_below="@+id/testSpinnerButton"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="28dp" />
 
 </RelativeLayout>
