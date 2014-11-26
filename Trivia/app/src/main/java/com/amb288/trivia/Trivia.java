@@ -63,7 +63,7 @@ public class Trivia extends ActionBarActivity {
             @Override
             public void onClick(View v) {
                 // Create an intent stating which Activity you would like to start
-                Intent intent = new Intent(Trivia.this, SpinnerQuestionActivity.class);
+                Intent intent = new Intent(Trivia.this, RadioQuestionActivity.class);
 
                 String[] answers = {"Ichigo Kurosaki", "Chuck Noris", "Orihime Inoue", "Goku", "Null Reference Exception" };
                 intent.putExtra("question", "What anime Character is featured in the LeekSpin animation?");
@@ -103,7 +103,7 @@ public class Trivia extends ActionBarActivity {
             @Override
             public void onClick(View v) {
                 // Create an intent stating which Activity you would like to start
-                Intent intent = new Intent(Trivia.this, RadioQuestionActivity.class);
+                Intent intent = new Intent(Trivia.this, SpinnerQuestionActivity.class);
 
                 String[] answers = { "Ievan Polkka by Loituma", "Cocaine by Nightcore", "Gōrudentaimurabā by Sukima Switch", "Sekai no Kami Desu YO! by Kami" };
                 intent.putExtra("question", "what delightful music plays in the background during leekspin?");
@@ -118,7 +118,7 @@ public class Trivia extends ActionBarActivity {
             }
         });
 
-        Button testRadioBtnActivity3 = (Button) findViewById(R.id.testSpinnerButton3);
+        Button testRadioBtnActivity3 = (Button) findViewById(R.id.testSpinnerButton4);
         testRadioBtnActivity3.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {

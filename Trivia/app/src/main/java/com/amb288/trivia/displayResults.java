@@ -18,7 +18,7 @@ public class displayResults extends Activity {
     private TextView statementLbl = null;
     private TextView resultLbl = null;
     private Bundle extras = null;
-    private double score = 0;
+    private double score = 0.0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,16 +50,16 @@ public class displayResults extends Activity {
         if (score == 1) {
             return "World Champion";
         }
-        else if (score > 90) {
+        else if (score >= 0.80) {
             return "Aspiring Scholar";
         }
-        else if (score > 80) {
+        else if (score >= 0.70) {
             return "Average Joe";
         }
-        else if (score > 70) {
+        else if (score >= 0.60) {
             return "Knowledgeable Muffin";
         }
-        else if (score > 60) {
+        else if (score >= 0.50) {
             return "Mopey Zoo Lion";
         }
         else {

@@ -21,9 +21,9 @@
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Start Radio Button Activity"
+        android:text="Question 1"
         android:id="@+id/testRadioButton"
-        android:layout_marginTop="29dp"
+        android:layout_marginTop="25dp"
         android:layout_below="@+id/userScore"
         android:layout_centerHorizontal="true" />
 
@@ -31,7 +31,7 @@
         android:layout_width="fill_parent"
         android:layout_height="80px"
         android:id="@+id/userScore"
-        android:layout_marginTop="25dp"
+        android:layout_marginTop="20dp"
         android:layout_below="@+id/textView"
         android:layout_centerHorizontal="true"
         android:autoText="false" />
@@ -39,37 +39,37 @@
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Start Spinner Acivity"
+        android:text="Question 2"
         android:id="@+id/testSpinnerButton"
         android:layout_below="@+id/testRadioButton"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="25dp" />
+        android:layout_marginTop="20dp" />
 
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Start Second Spinner Activity"
+        android:text="Question 3"
         android:id="@+id/testSpinnerButton2"
         android:layout_below="@+id/testSpinnerButton"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="28dp" />
+        android:layout_marginTop="20dp" />
 
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Start Se"
+        android:text="Question 4"
         android:id="@+id/testSpinnerButton3"
-        android:layout_marginTop="25dp"
+        android:layout_marginTop="20dp"
         android:layout_below="@+id/testSpinnerButton2"
         android:layout_centerHorizontal="true" />
 
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Start Se"
+        android:text="Question 5"
         android:id="@+id/testSpinnerButton4"
-        android:layout_marginTop="25dp"
-        android:layout_below="@+id/testSpinnerButton3"
-        android:layout_centerHorizontal="true" />
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="30dp" />
 
 </RelativeLayout>
