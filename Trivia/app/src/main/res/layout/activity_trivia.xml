@@ -54,4 +54,13 @@
         android:layout_centerHorizontal="true"
         android:layout_marginTop="28dp" />
 
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Start Se"
+        android:id="@+id/testSpinnerButton3"
+        android:layout_marginTop="25dp"
+        android:layout_below="@+id/testSpinnerButton2"
+        android:layout_centerHorizontal="true" />
+
 </RelativeLayout>

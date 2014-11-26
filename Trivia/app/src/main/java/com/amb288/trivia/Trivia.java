@@ -33,6 +33,7 @@ public class Trivia extends ActionBarActivity {
         secondQuestion = (Button) findViewById(R.id.testSpinnerButton);
         thirdQuestion = (Button) findViewById(R.id.testSpinnerButton2);
 
+
         Button testRadioBtnActivity = (Button) findViewById(R.id.testRadioButton);
         testRadioBtnActivity.setOnClickListener(new OnClickListener() {
             @Override
