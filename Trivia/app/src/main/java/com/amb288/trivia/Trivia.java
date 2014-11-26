@@ -11,7 +11,7 @@ import android.widget.TextView;
 
 public class Trivia extends ActionBarActivity {
     /* Make sure to update totalQuestions as you add more questions*/
-    private int totalQuestions = 3;
+    private int totalQuestions = 5;
     private int correct = 0, wrong = 0;
 
     /* Under most casts we would want a unique identifier for the startActivityForResults function
@@ -22,6 +22,8 @@ public class Trivia extends ActionBarActivity {
     private Button firstQuestion = null;
     private Button secondQuestion = null;
     private Button thirdQuestion = null;
+    private Button foruthQuestion = null;
+    private Button lastQuestion = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,6 +34,8 @@ public class Trivia extends ActionBarActivity {
         firstQuestion = (Button) findViewById(R.id.testRadioButton);
         secondQuestion = (Button) findViewById(R.id.testSpinnerButton);
         thirdQuestion = (Button) findViewById(R.id.testSpinnerButton2);
+        foruthQuestion = (Button) findViewById(R.id.testSpinnerButton3);
+        lastQuestion = (Button) findViewById(R.id.testSpinnerButton4);
 
 
         Button testRadioBtnActivity = (Button) findViewById(R.id.testRadioButton);
@@ -41,10 +45,10 @@ public class Trivia extends ActionBarActivity {
                 // Create an intent stating which Activity you would like to start
                 Intent intent = new Intent(Trivia.this, RadioQuestionActivity.class);
 
-                String[] answers = { "Alex", "Andrew", "Mike", "Riley" };
-                intent.putExtra("question", "Who enjoys listening to leekspin?");
+                String[] answers = { "A Leek", " A Welsh Onion", "Garlic", "Ichigo Kurosaki" };
+                intent.putExtra("question", "What object Spins in the LeekSpin Animation?");
                 intent.putExtra("selection", answers); /* For radio button always add 4 entries. No more, and no less.*/
-                intent.putExtra("answer", 4); /* 1 based answer index in the array */
+                intent.putExtra("answer", 2); /* 1 based answer index in the array */
 
                 /* Lock the button you pressed so the user can't answer that question more than once */
                 firstQuestion.setEnabled(false);
@@ -61,10 +65,10 @@ public class Trivia extends ActionBarActivity {
                 // Create an intent stating which Activity you would like to start
                 Intent intent = new Intent(Trivia.this, SpinnerQuestionActivity.class);
 
-                String[] answers = {"Lack of water", "Chuck Noris has already been there", "Uninhabitable atmosphere", "The time shares are too costly", "Null Reference Exception" };
-                intent.putExtra("question", "Why are there no signs of life on Mars?");
+                String[] answers = {"Ichigo Kurosaki", "Chuck Noris", "Orihime Inoue", "Goku", "Null Reference Exception" };
+                intent.putExtra("question", "What anime Character is featured in the LeekSpin animation?");
                 intent.putExtra("selection", answers); /* For spinner questions add as many entries as you want*/
-                intent.putExtra("answer", 2); /* 1 based answer index in the array */
+                intent.putExtra("answer", 3); /* 1 based answer index in the array */
 
                 /* Lock the button you pressed so the user can't answer that question more than once */
                 secondQuestion.setEnabled(false);
@@ -81,10 +85,10 @@ public class Trivia extends ActionBarActivity {
                 // Create an intent stating which Activity you would like to start
                 Intent intent = new Intent(Trivia.this, SpinnerQuestionActivity.class);
 
-                String[] answers = {"Selection 1", "Selection 2", "Selection 3", "Selection 4", "Selection 5", "Selection 6", "Selection 7", "Selection 8", "Selection 9" };
-                intent.putExtra("question", "The answer to this question is Selection 9");
+                String[] answers = {"2", "3", "4", "5", "6", "7", "56", "784" };
+                intent.putExtra("question", "How many frames does the Leekspin animation have?");
                 intent.putExtra("selection", answers); /* For spinner questions add as many entries as you want*/
-                intent.putExtra("answer", 9); /* 1 based answer index in the array */
+                intent.putExtra("answer", 3); /* 1 based answer index in the array */
 
                 /* Lock the button you pressed so the user can't answer that question more than once */
                 thirdQuestion.setEnabled(false);
