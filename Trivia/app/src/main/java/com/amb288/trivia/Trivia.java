@@ -97,6 +97,47 @@ public class Trivia extends ActionBarActivity {
                 startActivityForResult(intent, NEW_QUESTION);
             }
         });
+
+        Button testRadioBtnActivity2 = (Button) findViewById(R.id.testSpinnerButton3);
+        testRadioBtnActivity2.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Create an intent stating which Activity you would like to start
+                Intent intent = new Intent(Trivia.this, RadioQuestionActivity.class);
+
+                String[] answers = { "Ievan Polkka by Loituma", "Cocaine by Nightcore", "Gōrudentaimurabā by Sukima Switch", "Sekai no Kami Desu YO! by Kami" };
+                intent.putExtra("question", "what delightful music plays in the background during leekspin?");
+                intent.putExtra("selection", answers); /* For radio button always add 4 entries. No more, and no less.*/
+                intent.putExtra("answer", 1); /* 1 based answer index in the array */
+
+                /* Lock the button you pressed so the user can't answer that question more than once */
+                foruthQuestion.setEnabled(false);
+
+                // Launch the Activity using the intent
+                startActivityForResult(intent, NEW_QUESTION);
+            }
+        });
+
+        Button testRadioBtnActivity3 = (Button) findViewById(R.id.testSpinnerButton3);
+        testRadioBtnActivity3.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Create an intent stating which Activity you would like to start
+                Intent intent = new Intent(Trivia.this, RadioQuestionActivity.class);
+
+                String[] answers = { "15 Seconds", "1 Minute 12 Seconds", "27 Seconds", "48 Seconds", "52 Seconds", "23 Seconds" };
+                intent.putExtra("question", "How Long is each leekspin music loop?");
+                intent.putExtra("selection", answers); /* For radio button always add 4 entries. No more, and no less.*/
+                intent.putExtra("answer", 3); /* 1 based answer index in the array */
+
+                /* Lock the button you pressed so the user can't answer that question more than once */
+                lastQuestion.setEnabled(false);
+
+                // Launch the Activity using the intent
+                startActivityForResult(intent, NEW_QUESTION);
+            }
+        });
+
     }
 
 
@@ -126,6 +167,8 @@ public class Trivia extends ActionBarActivity {
             firstQuestion.setEnabled(true);
             secondQuestion.setEnabled(true);
             thirdQuestion.setEnabled(true);
+            foruthQuestion.setEnabled(true);
+            lastQuestion.setEnabled(true);
             correct = 0;
             wrong = 0;
         }
