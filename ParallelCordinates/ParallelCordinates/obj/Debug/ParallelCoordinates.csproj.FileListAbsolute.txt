@@ -14,3 +14,5 @@ c:\users\flander\documents\visual studio 2013\Projects\ParallelCordinates\Parall
 c:\users\flander\documents\visual studio 2013\Projects\ParallelCordinates\ParallelCordinates\obj\Debug\ParallelCordinates.exe
 c:\users\flander\documents\visual studio 2013\Projects\ParallelCordinates\ParallelCordinates\obj\Debug\ParallelCordinates.pdb
 c:\users\flander\documents\visual studio 2013\Projects\ParallelCordinates\ParallelCordinates\obj\Debug\ParallelCoordinates.csprojResolveAssemblyReference.cache
+c:\users\flander\documents\visual studio 2013\Projects\ParallelCordinates\ParallelCordinates\obj\Debug\ParallelCoordinates2D.baml
+c:\users\flander\documents\visual studio 2013\Projects\ParallelCordinates\ParallelCordinates\obj\Debug\ParallelCoordinates2D.g.cs

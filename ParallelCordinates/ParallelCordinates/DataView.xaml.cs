@@ -19,39 +19,46 @@ namespace ParallelCordinates
 {
     public partial class DataView : Window
     {
+        public bool BrokenView;
+
         public DataView()
         {
             InitializeComponent();
+            BrokenView = false;
         }
 
         public DataView(List<DataEntry> userData)
         {
             InitializeComponent();
+            BrokenView = false;
 
-            for (int i = 0; i < userData.Count; ++i)
+            try
             {
-                DataGridTextColumn textColumn = new DataGridTextColumn();
-                textColumn.Header = userData[i].ColumnName;
-                textColumn.Binding = new Binding(userData[i].ColumnName.Replace(' ', '_'));
-                ViewDataGrid.Columns.Add(textColumn);
-            }
-
-            for (int i = 0; i < userData[0].Data.Count; ++i)
-            {
-                dynamic row = new ExpandoObject();
-
-                for (int j = 0; j < userData.Count; ++j)
+                for (int i = 0; i < userData.Count; ++i)
                 {
-                    ((IDictionary<String, Object>)row)[userData[j].ColumnName.Replace(' ', '_')] = userData[j].Data[i];
+                    DataGridTextColumn textColumn = new DataGridTextColumn();
+                    textColumn.Header = userData[i].ColumnName;
+                    textColumn.Binding = new Binding(userData[i].ColumnName.Replace(' ', '_'));
+                    ViewDataGrid.Columns.Add(textColumn);
                 }
 
-                ViewDataGrid.Items.Add(row);
+                for (int i = 0; i < userData[0].Data.Count; ++i)
+                {
+                    dynamic row = new ExpandoObject();
+
+                    for (int j = 0; j < userData.Count; ++j)
+                    {
+                        ((IDictionary<String, Object>)row)[userData[j].ColumnName.Replace(' ', '_')] = userData[j].Data[i];
+                    }
+
+                    ViewDataGrid.Items.Add(row);
+                }
             }
-        }
-
-        private void ViewDataGrid_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-
+            catch
+            {
+                MessageBoxResult messageBoxResult = System.Windows.MessageBox.Show("A error has occured. As a result the data interpretation cannot be viewed.", "Alert", System.Windows.MessageBoxButton.OK);
+                BrokenView = true;
+            }
         }
     }
 }

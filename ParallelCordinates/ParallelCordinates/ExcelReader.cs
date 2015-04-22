@@ -10,11 +10,6 @@ namespace DataReader
 {
     public class DataEntry
     {
-        public DataEntry()
-        {
-
-        }
-
         public DataEntry(string ColumnName)
         {
             this.ColumnName = ColumnName;
@@ -41,12 +36,60 @@ namespace DataReader
         {
             ds = new List<DataEntry>();
 
+            if (fileName.IndexOf(".txt") != -1)
+            {
+                readFromText(fileName);
+            }
+            else
+            {
+                readFromExcel(fileName);
+            }
+        }
+
+        void readFromText(string fileName)
+        {
+            string[] dataFile = File.ReadAllLines(fileName);
+
+            foreach (var columnName in dataFile[0].Trim('\t').Replace("\t\t","\t[NONE]\t").Split('\t'))
+            {
+                ds.Add(new DataEntry(columnName));
+            }
+
+            for (int i = 1; i < dataFile.Length; ++i)
+            {
+                string[] entries = dataFile[i].Trim('\t').Replace("\t\t", "\t[NONE]\t").Split('\t');
+
+                if (entries.Length == 0)
+                {
+                    continue;
+                }
+
+                for (int j = 0; j < entries.Length; ++j)
+                {
+                    ds[j].Data.Add(entries[j]);
+
+                    int parseValue;
+                    ds[j].AllNumbers = ds[j].AllNumbers && (Int32.TryParse(entries[j], out parseValue) || entries[j] == "");
+                }
+            }
+
+            parseData();
+        }
+
+        void readFromExcel(string fileName)
+        {
+            int worksheetItter = 0;
             foreach (var worksheet in Workbook.Worksheets(fileName))
             {
-                // Retrieve column names
-                for (int i = 0; true /*i < worksheet.Rows[0].Cells.Length*/; ++i)
+                if (worksheetItter != 0)
                 {
-                    // worksheet.Rows[0].Cells.Length provides an inconsitance length
+                    break;
+                }
+
+                // Retrieve column names
+                for (int i = 0; true; ++i)
+                {
+                    // worksheet.Rows[0].Cells.Length provides an inconsistant length
                     // so this method of itteration condition is used
                     try
                     {
@@ -76,23 +119,28 @@ namespace DataReader
                             break;
                         }
 
-                        ds[iter].Data.Add(cell.Text);
+                        ds[iter].Data.Add(cell.Text == "" ? "[NONE]" : cell.Text);
 
                         int parseValue;
-                        ds[iter].AllNumbers = ds[iter].AllNumbers && Int32.TryParse(cell.Text, out parseValue);
+                        ds[iter].AllNumbers = ds[iter].AllNumbers && (Int32.TryParse(cell.Text, out parseValue) || cell.Text == "");
                         ++iter;
                     }
                 }
 
-                // Sort through data
-                for (int i = 0; i < ds.Count; ++i)
-                {
-                    ds[i].UniquEntries = ds[i].Data.Distinct().ToList().Count;
+                parseData();
+                ++worksheetItter;
+            }
+        }
 
-                    if (ds[i].AllNumbers)
-                    {
-                        ds[i].NumberRange = new Tuple<double, double>(double.Parse(ds[i].Data.Min()), double.Parse(ds[i].Data.Max()));
-                    }
+        void parseData()
+        {
+            for (int i = 0; i < ds.Count; ++i)
+            {
+                ds[i].UniquEntries = ds[i].Data.Distinct().ToList().Count;
+
+                if (ds[i].AllNumbers)
+                {
+                    ds[i].NumberRange = new Tuple<double, double>(double.Parse(ds[i].Data.Min()), double.Parse(ds[i].Data.Max()));
                 }
             }
         }

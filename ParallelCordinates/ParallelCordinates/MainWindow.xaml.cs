@@ -17,12 +17,10 @@ using DataReader;
 
 namespace ParallelCordinates
 {
-    /// <summary>
-    /// Interaction logic for MainWindow.xaml
-    /// </summary>
     public partial class MainWindow : Window
     {
         private List<DataEntry> UserData;
+        string VisualizationMethod;
 
         private void FileBrowserBtn(object sender, RoutedEventArgs e)
         {
@@ -31,7 +29,7 @@ namespace ParallelCordinates
 
             // Set filter for file extension and default file extension 
             fileSelector.DefaultExt = ".xlsx";
-            fileSelector.Filter = "Excel Files (*.xlsx)|*.xlsx|Excel Files (*.xls)|*.xls";
+            fileSelector.Filter = "Excel Files (*.xlsx)|*.xlsx|Excel Files (*.xls)|*.xls|Text Files (*.txt)|*.txt|All File Types (*.*)|*.*";
 
             // Get the selected file name and display in a TextBox 
             if ((bool)fileSelector.ShowDialog())
@@ -40,11 +38,18 @@ namespace ParallelCordinates
                 {
                     UserData = new ExcelReader(fileSelector.FileName).ds;
                     DataInterpretationBtn.IsEnabled = true;
+                    LaunchBtn.IsEnabled = true;
                     FileNameLbl.Content = fileSelector.FileName.Substring(fileSelector.FileName.LastIndexOf("\\") + 1);
                 }
                 catch (IOException)
                 {
                     FileNameLbl.Content = "Cannot open file (currently in use)";
+                    DataInterpretationBtn.IsEnabled = false;
+                    LaunchBtn.IsEnabled = false;
+                }
+                catch
+                {
+                    FileNameLbl.Content = "Error parsing data";
                     DataInterpretationBtn.IsEnabled = false;
                     LaunchBtn.IsEnabled = false;
                 }
@@ -61,12 +66,30 @@ namespace ParallelCordinates
             }
 
             DataView page = new DataView(minimizedData);
-            page.Show();
+            
+            if (!page.BrokenView)
+            {
+                page.Show();
+            }
         }
 
         private void CheckBox_Checked(object sender, RoutedEventArgs e)
         {
+            var visualizationRadioBtn = (RadioButton)sender;
+            VisualizationMethod = (string)visualizationRadioBtn.Content;
+        }
 
+        private void LaunchBtn_Click(object sender, RoutedEventArgs e)
+        {
+            if (VisualizationMethod == "2D in 2D")
+            {
+                ParallelCoordinates2D page = new ParallelCoordinates2D(UserData);
+                page.Show();
+            }
+            else if (VisualizationMethod == "2D in 3D Spiral")
+            {
+                FileNameLbl.Content = "Thing 3";
+            }
         }
     }
 }

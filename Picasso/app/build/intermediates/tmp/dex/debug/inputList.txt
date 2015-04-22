@@ -1,0 +1,5 @@
+C:\Users\Flander\Documents\GitHub\Projects\Picasso\app\build\intermediates\classes\debug
+C:\Users\Flander\Documents\GitHub\Projects\Picasso\app\build\intermediates\pre-dexed\debug\support-annotations-21.0.2-03f0d00b2c2c1749b2abc9ea849bce1335cb6af1.jar
+C:\Users\Flander\Documents\GitHub\Projects\Picasso\app\build\intermediates\pre-dexed\debug\internal_impl-21.0.2-de2180cf168a1db522e2e372723065046e870b43.jar
+C:\Users\Flander\Documents\GitHub\Projects\Picasso\app\build\intermediates\pre-dexed\debug\classes-8921a36bf694d0c69ecbd9e38c76d7fde628146a.jar
+C:\Users\Flander\Documents\GitHub\Projects\Picasso\app\build\intermediates\pre-dexed\debug\classes-869464045ba730934569be0c215935a2c7be730c.jar
