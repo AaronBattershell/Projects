@@ -18,6 +18,13 @@ namespace ParallelCordinates
 {
     public partial class ParallelCoordinates2D : Window
     {
+        int windowHeight;
+        int windowWidth;
+
+        const double MIN_DISTANCE = 60;
+
+        List<DataEntry> GraphData;
+
         public ParallelCoordinates2D()
         {
             InitializeComponent();
@@ -26,87 +33,42 @@ namespace ParallelCordinates
         public ParallelCoordinates2D(List<DataEntry> userData) 
         {
             InitializeComponent();
-            //Measure(new Size(double.PositiveInfinity, double.PositiveInfinity));
-            //Arrange(new Rect(0, 0, DesiredWidth, DesiredHeight));
-            window.Measure(new Size(double.PositiveInfinity, double.PositiveInfinity));
-            window.Arrange(new Rect(0, 0, window.window.DesiredSize.Width, window.window.DesiredSize.Height));
 
+            GraphData = userData;
+
+            //MessageBoxResult messageBoxResult = System.Windows.MessageBox.Show("Good Columns: " + GraphData.Count(e => e.UniquEntries <= 25 || e.AllNumbers == true).ToString() + " of " + GraphData.Count().ToString(), "Alert", System.Windows.MessageBoxButton.OK);
+
+            windowHeight = (int)SystemParameters.FullPrimaryScreenHeight;
+            windowWidth = (int)SystemParameters.FullPrimaryScreenWidth;
+
+            canvas.Height = windowHeight;
+            canvas.Width = windowWidth;
+
+            double normalWidth = (2 / (double)userData.Count * windowWidth) - (1 / (double)userData.Count * windowWidth);
+
+            double XStep = Math.Max(normalWidth, MIN_DISTANCE);
+
+            canvas.Width = XStep * userData.Count;
 
             for (int i = 0; i < userData.Count; ++i)
             {
-                var a = new Line()
-                {
-                    X1 = i / (double)userData.Count * (window.ActualWidth + 0),
-                    Y1 = 50,
-                    X2 = i / (double)userData.Count * (window.ActualWidth + 0),
-                    Y2 = (window.ActualHeight + 0) - 50,
-                    StrokeThickness = 1,
-                    Stroke = Brushes.Black
-                };
-                canvas.Children.Add(a);
-                //dc.DrawLine(new Pen(Brushes.Black, 1), new Point(i / (double)userData.Count * width, 50), new Point(i / (double)userData.Count * width, height - 50));
+                canvas.Children.Add(DrawLine(new Pen(Brushes.Red, 1), new Point(XStep * i + XStep / 2, 50), new Point(XStep * i + XStep / 2, windowHeight - 50)));
             }
+        }
 
-            var b = new Line()
+        Line DrawLine(Pen p, Point p1, Point p2)
+        {
+            Line l = new Line()
             {
-                X1 = 0,
-                Y1 = 50,
-                X2 = 2200,
-                Y2 = (canvas.ActualHeight + 1080) - 50,
-                StrokeThickness = 6,
-                Stroke = Brushes.Red
+                X1 = p1.X,
+                Y1 = p1.Y,
+                X2 = p2.X,
+                Y2 = p2.Y,
+                StrokeThickness = p.Thickness,
+                Stroke = p.Brush
             };
-            canvas.Children.Add(b);
 
-        }
-    }
-
-    class MyCanvas : Canvas
-    {
-        List<DataEntry> userData;
-
-        public MyCanvas(List<DataEntry> userData) : base()
-        {
-            this.userData = userData;
-        }
-
-        protected override void OnRender(DrawingContext dc)
-        {
-            //drawRectangle(dc);
-            //drawTriangle(dc);
-            //drawLine(dc);
-
-            double height = this.ActualHeight + 1080;
-            double width = this.ActualWidth;
-
-            for (int i = 0; i < userData.Count; ++i)
-            {
-                dc.DrawLine(new Pen(Brushes.Black, 1), new Point(i / (double)userData.Count * width, 50), new Point(i / (double)userData.Count * width, height - 50));
-            }
-        }
-
-        void drawRectangle(DrawingContext dc)
-        {
-            dc.DrawRectangle(Brushes.Aqua, new Pen(Brushes.Black, 5), new Rect(new Point(100, 0), new Point(300, 100)));
-        }
-
-        void drawLine(DrawingContext dc)
-        {
-            dc.DrawLine(new Pen(Brushes.Black, 1), new Point(0, 100), new Point(100, 0));
-        }
-
-        void drawTriangle(DrawingContext dc)
-        {
-            PathFigure pathFigure = new PathFigure();
-            pathFigure.StartPoint = new Point(100, 100);
-            pathFigure.IsClosed = true;
-            pathFigure.Segments.Add(new LineSegment(new Point(0, 200), true));
-            pathFigure.Segments.Add(new LineSegment(new Point(200, 200), true));
-
-            PathGeometry geometry = new PathGeometry();
-            geometry.Figures.Add(pathFigure);
-
-            dc.DrawGeometry(Brushes.Orange, new Pen(Brushes.Black, 5), geometry);
+            return l;
         }
     }
 }

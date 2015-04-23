@@ -8,14 +8,26 @@ using System.IO;
 
 namespace DataReader
 {
+    public class Pair<T1, T2>
+    {
+        public Pair(T1 first, T2 second)
+        {
+            First = first;
+            Second = second;
+        }
+
+        public T1 First { get; set; }
+        public T2 Second { get; set; }
+    }
+
     public class DataEntry
     {
         public DataEntry(string ColumnName)
         {
             this.ColumnName = ColumnName;
             Data = new List<string>();
-            NumberRange = new Tuple<double, double>(-1, -1);
-            AllNumbers = false;
+            NumberRange = new Pair<double, double>(-1, -1);
+            AllNumbers = true;
             UniquEntries = -1;
         }
 
@@ -25,7 +37,7 @@ namespace DataReader
         public int UniquEntries;
 
         public bool AllNumbers;
-        public Tuple<double, double> NumberRange;
+        public Pair<double, double> NumberRange;
     }
 
     public class ExcelReader
@@ -50,14 +62,14 @@ namespace DataReader
         {
             string[] dataFile = File.ReadAllLines(fileName);
 
-            foreach (var columnName in dataFile[0].Trim('\t').Replace("\t\t","\t[NONE]\t").Split('\t'))
+            foreach (var columnName in dataFile[0].Trim().Split('\t'))
             {
                 ds.Add(new DataEntry(columnName));
             }
 
             for (int i = 1; i < dataFile.Length; ++i)
             {
-                string[] entries = dataFile[i].Trim('\t').Replace("\t\t", "\t[NONE]\t").Split('\t');
+                string[] entries = dataFile[i].Trim().Replace("\t\t", "\t[Not Available]\t").Replace("\t\t", "\t[Not Available]\t").Split('\t');
 
                 if (entries.Length == 0)
                 {
@@ -66,10 +78,11 @@ namespace DataReader
 
                 for (int j = 0; j < entries.Length; ++j)
                 {
-                    ds[j].Data.Add(entries[j]);
+                    ds[j].Data.Add(entries[j].Replace(",", "").Trim());
 
-                    int parseValue;
-                    ds[j].AllNumbers = ds[j].AllNumbers && (Int32.TryParse(entries[j], out parseValue) || entries[j] == "");
+                    double parseValue;
+                    string parseStringValue = entries[j].Replace(",", "").Replace("$", "").Trim();
+                    ds[j].AllNumbers = ds[j].AllNumbers && (double.TryParse(parseStringValue, out parseValue) || parseStringValue == "" || (parseStringValue[0] == '[' && parseStringValue[parseStringValue.Length - 1] == ']'));
                 }
             }
 
@@ -87,13 +100,13 @@ namespace DataReader
                 }
 
                 // Retrieve column names
-                for (int i = 0; true; ++i)
+                for (int i = 0; i < worksheet.Rows.First().Cells.Length; ++i)
                 {
                     // worksheet.Rows[0].Cells.Length provides an inconsistant length
                     // so this method of itteration condition is used
                     try
                     {
-                        ds.Add(new DataEntry(worksheet.Rows.First().Cells[i].Text));
+                        ds.Add(new DataEntry(worksheet.Rows.First().Cells[i].Text.Trim()));
                     }
                     catch (IndexOutOfRangeException)
                     {
@@ -119,10 +132,12 @@ namespace DataReader
                             break;
                         }
 
-                        ds[iter].Data.Add(cell.Text == "" ? "[NONE]" : cell.Text);
+                        ds[iter].Data.Add(cell.Text.Replace(",", "").Trim() == "" || cell.Text == null ? "[Not Available]" : cell.Text.Replace(",", "").Trim());
 
-                        int parseValue;
-                        ds[iter].AllNumbers = ds[iter].AllNumbers && (Int32.TryParse(cell.Text, out parseValue) || cell.Text == "");
+                        double parseValue;
+                        string parseStringValue = cell.Text.Replace(",", "").Replace("$", "").Trim();
+                        ds[iter].AllNumbers = ds[iter].AllNumbers && (double.TryParse(parseStringValue, out parseValue) || parseStringValue == "" || (parseStringValue[0] == '[' && parseStringValue[parseStringValue.Length - 1] == ']'));
+                        
                         ++iter;
                     }
                 }
@@ -140,7 +155,15 @@ namespace DataReader
 
                 if (ds[i].AllNumbers)
                 {
-                    ds[i].NumberRange = new Tuple<double, double>(double.Parse(ds[i].Data.Min()), double.Parse(ds[i].Data.Max()));
+                    foreach (var num in ds[i].Data)
+                    {
+                        double parseValue;
+                        if (double.TryParse(num, out parseValue))
+                        {
+                            ds[i].NumberRange.First = Math.Min(ds[i].NumberRange.First, parseValue);
+                            ds[i].NumberRange.Second = Math.Max(ds[i].NumberRange.Second, parseValue);
+                        }
+                    }
                 }
             }
         }

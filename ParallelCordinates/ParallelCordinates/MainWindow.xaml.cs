@@ -61,8 +61,12 @@ namespace ParallelCordinates
             List<DataEntry> minimizedData = new List<DataEntry>();
             for (int i = 0; i < UserData.Count; ++i)
             {
-                minimizedData.Add(UserData[i]);
-                minimizedData[i].Data = minimizedData[i].Data.Take(21).ToList();
+
+                minimizedData.Add(new DataEntry(UserData[i].ColumnName));
+                for (int j = 0; j < 21 && j < UserData[i].Data.Count; ++j)
+                {
+                    minimizedData[i].Data.Add(UserData[i].Data[j]);
+                }
             }
 
             DataView page = new DataView(minimizedData);
