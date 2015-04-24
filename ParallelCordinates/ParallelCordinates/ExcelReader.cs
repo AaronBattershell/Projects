@@ -160,8 +160,16 @@ namespace DataReader
                         double parseValue;
                         if (double.TryParse(num, out parseValue))
                         {
-                            ds[i].NumberRange.First = Math.Min(ds[i].NumberRange.First, parseValue);
-                            ds[i].NumberRange.Second = Math.Max(ds[i].NumberRange.Second, parseValue);
+                            if (ds[i].NumberRange.First == -1 && ds[i].NumberRange.Second == -1)
+                            {
+                                ds[i].NumberRange.First = parseValue;
+                                ds[i].NumberRange.Second = parseValue;
+                            }
+                            else
+                            {
+                                ds[i].NumberRange.First = Math.Min(ds[i].NumberRange.First, parseValue);
+                                ds[i].NumberRange.Second = Math.Max(ds[i].NumberRange.Second, parseValue);
+                            }
                         }
                     }
                 }

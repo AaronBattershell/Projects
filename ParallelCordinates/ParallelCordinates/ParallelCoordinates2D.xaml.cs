@@ -25,6 +25,9 @@ namespace ParallelCordinates
         const double BORDER_DISTANCE = 50;
         const double NUMERIC_POINTS = 5;
         const double Y_COLUMN_OFFSET = - BORDER_DISTANCE / 2;
+        const double TEXT_OFFSET_X = 3;
+        const double TEXT_OFFSET_Y = - 25;
+
 
         DisplayData GraphData;
 
@@ -50,33 +53,38 @@ namespace ParallelCordinates
 
             double normalWidth = (2 / (double)GraphData.GridData.Count * windowWidth) - (1 / (double)GraphData.GridData.Count * windowWidth);
             double XStep = Math.Max(normalWidth, MIN_X_DISTANCE);
-            canvas.Width = XStep * GraphData.GridData.Count;
+            canvas.Width = XStep * GraphData.GridData.Count + BORDER_DISTANCE * 2;
 
             // Draw Vertical Lines
             for (int i = 0; i < GraphData.GridData.Count; ++i)
             {
-                GraphData.ColumnPositions.Add(new ColumnData(new Point(XStep * i + XStep / 2, BORDER_DISTANCE - Y_COLUMN_OFFSET), new Point(XStep * i + XStep / 2, windowHeight - BORDER_DISTANCE - Y_COLUMN_OFFSET)));
+                GraphData.ColumnPositions.Add(new ColumnData(new Point(XStep * i + XStep / 2 + BORDER_DISTANCE, BORDER_DISTANCE - Y_COLUMN_OFFSET), new Point(XStep * i + XStep / 2 + BORDER_DISTANCE, windowHeight - BORDER_DISTANCE - Y_COLUMN_OFFSET)));
                 canvas.Children.Add(DrawLine(new Pen(Brushes.Red, 1), GraphData.ColumnPositions.Last().Top, GraphData.ColumnPositions.Last().Botumn));
-                canvas.Children.Add(DrawText(GraphData.GridData[i].ColumnName, new Point(GraphData.ColumnPositions[i].Top.X - GraphData.GridData[i].ColumnName.Length * 3, -Y_COLUMN_OFFSET/2 + (XStep < 150 ? (i % 3) * 20 : 0)), Colors.Black));
+                canvas.Children.Add(DrawText(GraphData.GridData[i].ColumnName, new Point(GraphData.ColumnPositions[i].Top.X - GraphData.GridData[i].ColumnName.Length * TEXT_OFFSET_X, -Y_COLUMN_OFFSET / 2 + (XStep < 150 ? (i % 3) * 20 : 0)), Colors.Black));
             }
 
             // Draw Horizontal Lines
             for (int i = 0; i < GraphData.GridData.Count; ++i)
             {
-                if (GraphData.GridData[i].AllNumbers)
+                if (GraphData.GridData[i].AllNumbers && GraphData.GridData[i].UniquEntries > 7)
                 {
                     for (int j = 0; j < NUMERIC_POINTS; ++j)
                     {
-                        GraphData.ColumnPositions[i].YPlacements.Add((int)(j / NUMERIC_POINTS * (canvas.Height - 2 * BORDER_DISTANCE) + (0.5 / NUMERIC_POINTS * (canvas.Height - 2 * BORDER_DISTANCE)) + BORDER_DISTANCE - Y_COLUMN_OFFSET));
-                        canvas.Children.Add(DrawLine(new Pen(Brushes.Black, 2), new Point(GraphData.ColumnPositions[i].Top.X - 10, GraphData.ColumnPositions[i].YPlacements[j]), new Point(GraphData.ColumnPositions[i].Top.X + 10, GraphData.ColumnPositions[i].YPlacements[j])));
+                        double labelNumber = (j == 0 ? GraphData.GridData[i].NumberRange.First : j == NUMERIC_POINTS - 1 ? GraphData.GridData[i].NumberRange.Second : (GraphData.GridData[i].NumberRange.Second - GraphData.GridData[i].NumberRange.First) * (j / (double)NUMERIC_POINTS) + GraphData.GridData[i].NumberRange.First);
+
+                        GraphData.ColumnPositions[i].YPlacements[j.ToString()] = (int)(j / NUMERIC_POINTS * (canvas.Height - 2 * BORDER_DISTANCE) + (0.5 / NUMERIC_POINTS * (canvas.Height - 2 * BORDER_DISTANCE)) + BORDER_DISTANCE - Y_COLUMN_OFFSET);
+                        canvas.Children.Add(DrawLine(new Pen(Brushes.Black, 2), new Point(GraphData.ColumnPositions[i].Top.X - 10, GraphData.ColumnPositions[i].YPlacements[j.ToString()]), new Point(GraphData.ColumnPositions[i].Top.X + 10, GraphData.ColumnPositions[i].YPlacements[j.ToString()])));
+                        canvas.Children.Add(DrawText(labelNumber.ToString(), new Point(GraphData.ColumnPositions[i].Top.X - labelNumber.ToString().Length * TEXT_OFFSET_X, GraphData.ColumnPositions[i].YPlacements[j.ToString()] + TEXT_OFFSET_Y), Colors.Black));
                     }
                 }
                 else
                 {
-                    for (int j = 0; j < GraphData.GridData[i].UniquEntries; ++j)
+                    List<string> uniquValues = GraphData.GridData[i].Data.Distinct().ToList();
+                    for (int j = 0; j < uniquValues.Count; ++j)
                     {
-                        GraphData.ColumnPositions[i].YPlacements.Add((int)(j / (double)GraphData.GridData[i].UniquEntries * (canvas.Height - 2 * BORDER_DISTANCE) + (0.5 / (double)GraphData.GridData[i].UniquEntries * (canvas.Height - 2 * BORDER_DISTANCE)) + BORDER_DISTANCE - Y_COLUMN_OFFSET));
-                        canvas.Children.Add(DrawLine(new Pen(Brushes.Black, 2), new Point(GraphData.ColumnPositions[i].Top.X - 10, GraphData.ColumnPositions[i].YPlacements[j]), new Point(GraphData.ColumnPositions[i].Top.X + 10, GraphData.ColumnPositions[i].YPlacements[j])));
+                        GraphData.ColumnPositions[i].YPlacements[uniquValues[j]] = ((int)(j / (double)GraphData.GridData[i].UniquEntries * (canvas.Height - 2 * BORDER_DISTANCE) + (0.5 / (double)GraphData.GridData[i].UniquEntries * (canvas.Height - 2 * BORDER_DISTANCE)) + BORDER_DISTANCE - Y_COLUMN_OFFSET));
+                        canvas.Children.Add(DrawLine(new Pen(Brushes.Black, 2), new Point(GraphData.ColumnPositions[i].Top.X - 10, GraphData.ColumnPositions[i].YPlacements[uniquValues[j]]), new Point(GraphData.ColumnPositions[i].Top.X + 10, GraphData.ColumnPositions[i].YPlacements[uniquValues[j]])));
+                        canvas.Children.Add(DrawText(GraphData.GridData[i].Data[j], new Point(GraphData.ColumnPositions[i].Top.X - GraphData.GridData[i].Data[j].Length * TEXT_OFFSET_X, GraphData.ColumnPositions[i].YPlacements[uniquValues[j]] + TEXT_OFFSET_Y), Colors.Black));
                     }
                 }
             }
@@ -128,18 +136,17 @@ namespace ParallelCordinates
     {
         public ColumnData()
         {
-            YPlacements = new List<int>();
+            YPlacements = new Dictionary<string, int>();
         }
 
-        public ColumnData(Point top, Point botumn)
+        public ColumnData(Point top, Point botumn) : this()
         {
-            YPlacements = new List<int>();
             Top = top;
             Botumn = botumn;
         }
 
         public Point Top { get; set; }
         public Point Botumn { get; set; }
-        public List<int> YPlacements { get; set; }
+        public Dictionary<string, int> YPlacements { get; set; }
     }
 }
