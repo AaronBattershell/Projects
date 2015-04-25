@@ -47,12 +47,12 @@ namespace ParallelCordinates
                     DataInterpretationBtn.IsEnabled = false;
                     LaunchBtn.IsEnabled = false;
                 }
-                catch
+                /*catch
                 {
                     FileNameLbl.Content = "Error parsing data";
                     DataInterpretationBtn.IsEnabled = false;
                     LaunchBtn.IsEnabled = false;
-                }
+                }*/
             }
         }
 

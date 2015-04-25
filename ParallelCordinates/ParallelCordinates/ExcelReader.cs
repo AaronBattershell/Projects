@@ -29,11 +29,13 @@ namespace DataReader
             NumberRange = new Pair<double, double>(-1, -1);
             AllNumbers = true;
             UniquEntries = -1;
+            ContainsEmptyEntry = false;
         }
 
         public string ColumnName;
         public List<string> Data;
 
+        public bool ContainsEmptyEntry;
         public int UniquEntries;
 
         public bool AllNumbers;
@@ -78,7 +80,12 @@ namespace DataReader
 
                 for (int j = 0; j < entries.Length; ++j)
                 {
-                    ds[j].Data.Add(entries[j].Replace(",", "").Trim());
+                    ds[j].Data.Add(entries[j].Replace(",", "").Trim() == "" || entries[j] == null ? "[Not Available]" : entries[j].Replace(",", "").Trim());
+
+                    if (ds[j].Data.Last()[0] == '[')
+                    {
+                        ds[j].ContainsEmptyEntry = true;
+                    }
 
                     double parseValue;
                     string parseStringValue = entries[j].Replace(",", "").Replace("$", "").Trim();
@@ -132,10 +139,15 @@ namespace DataReader
                             break;
                         }
 
-                        ds[iter].Data.Add(cell.Text.Replace(",", "").Trim() == "" || cell.Text == null ? "[Not Available]" : cell.Text.Replace(",", "").Trim());
+                        ds[iter].Data.Add(cell == null || cell.Text.Replace(",", "").Trim() == null ? "[Not Available]" : cell.Text.Replace(",", "").Trim());
+
+                        if (ds[iter].Data.Last()[0] == '[')
+                        {
+                            ds[iter].ContainsEmptyEntry = true;
+                        }
 
                         double parseValue;
-                        string parseStringValue = cell.Text.Replace(",", "").Replace("$", "").Trim();
+                        string parseStringValue = ds[iter].Data.Last().Replace("$", "").Trim();
                         ds[iter].AllNumbers = ds[iter].AllNumbers && (double.TryParse(parseStringValue, out parseValue) || parseStringValue == "" || (parseStringValue[0] == '[' && parseStringValue[parseStringValue.Length - 1] == ']'));
                         
                         ++iter;
