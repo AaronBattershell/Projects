@@ -113,6 +113,11 @@ namespace DataReader
                     // so this method of itteration condition is used
                     try
                     {
+                        if (worksheet.Rows.First().Cells[i] == null)
+                        {
+                            break;
+                        }
+
                         ds.Add(new DataEntry(worksheet.Rows.First().Cells[i].Text.Trim()));
                     }
                     catch (IndexOutOfRangeException)

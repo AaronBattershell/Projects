@@ -10,7 +10,7 @@
         ScrollViewer.CanContentScroll="True" 
         ScrollViewer.VerticalScrollBarVisibility="Auto"
         ScrollViewer.HorizontalScrollBarVisibility="Auto">
-        <Canvas Name="canvas">
+        <Canvas Name="canvas" MouseDown="mouseDown" MouseUp="mouseUP" Background="Transparent">
         </Canvas>
     </ScrollViewer>
     
