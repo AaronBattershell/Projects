@@ -87,13 +87,19 @@ namespace ParallelCordinates
         {
             if (VisualizationMethod == "2D in 2D")
             {
-                ParallelCoordinates2D page = new ParallelCoordinates2D(UserData);
+                ParallelCoordinates2D page = new ParallelCoordinates2D(UserData, Int32.Parse(MinColumnWidthTxtBx.Text), Int32.Parse(BeginNumericAproxTxtBx.Text), Int32.Parse(MaxUniqueEntriesTxtBx.Text));
                 page.Show();
             }
             else if (VisualizationMethod == "2D in 3D Spiral")
             {
-                FileNameLbl.Content = "Thing 3";
+                FileNameLbl.Content = "2D in 3D Spiral";
             }
+        }
+
+        public void PreviewTextInput(object sender, TextCompositionEventArgs e)
+        {
+            int val;
+            e.Handled = !Int32.TryParse(e.Text, out val); 
         }
     }
 }

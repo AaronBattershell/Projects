@@ -26,13 +26,17 @@
                     <Button Name="DataInterpretationBtn" Content="View Data Interpretation" HorizontalAlignment="Left" Margin="331,30,0,0" IsEnabled="False" VerticalAlignment="Top" Width="141" Click="DisplayData"/>
 
                     <Label Content="Visualization Method" HorizontalAlignment="Left" Margin="9,86,0,0" VerticalAlignment="Top" Width="140" FontSize="14"/>
-                    <GroupBox x:Name="VisualizationTypeGroup">
-                        <StackPanel>
-                            <RadioButton Content="2D in 2D" HorizontalAlignment="Left" Margin="43,120,0,0" VerticalAlignment="Top" IsChecked="True" Checked="CheckBox_Checked" Width="94" Height="19"/>
-                            <RadioButton Content="2D in 3D Spiral" HorizontalAlignment="Left" Margin="43,5,0,0" VerticalAlignment="Top" Checked="CheckBox_Checked" Width="107" Height="19"/>
-                        </StackPanel>
-                    </GroupBox>
+                    <RadioButton Content="2D in 2D" HorizontalAlignment="Left" Margin="43,120,0,0" VerticalAlignment="Top" IsChecked="True" Checked="CheckBox_Checked" Width="94" Height="19"/>
+                    <RadioButton Content="2D in 3D Spiral"  HorizontalAlignment="Left" Margin="43,146,0,0" VerticalAlignment="Top" Checked="CheckBox_Checked" Width="107" Height="19" IsEnabled="False"/>
                     <Button Name="LaunchBtn" Content="Launch Visualization" HorizontalAlignment="Left" Margin="43,219,0,0" VerticalAlignment="Top" Width="399" Height="22" IsEnabled="False" Click="LaunchBtn_Click"/>
+                    <Label Content="Visualization Constraints" HorizontalAlignment="Left" Margin="199,86,0,0" VerticalAlignment="Top" Width="180" FontSize="14"/>
+                    <TextBox Name="MinColumnWidthTxtBx" HorizontalAlignment="Left" Height="23" Margin="351,119,0,0" TextWrapping="Wrap" Text="300" VerticalAlignment="Top" Width="30" PreviewTextInput="PreviewTextInput"/>
+                    <Label Content="Min Column Width: " HorizontalAlignment="Left" Margin="228,115,0,0" VerticalAlignment="Top"/>
+                    <Label Content="px" HorizontalAlignment="Left" Margin="377,115,0,0" VerticalAlignment="Top" Width="22" />
+                    <TextBox Name="BeginNumericAproxTxtBx" HorizontalAlignment="Left" Height="23" Margin="351,145,0,0" TextWrapping="Wrap" Text="10" VerticalAlignment="Top" Width="30" PreviewTextInput="PreviewTextInput"/>
+                    <Label Content="Begin Numeric Aprox:" HorizontalAlignment="Left" Margin="228,141,0,0" VerticalAlignment="Top"/>
+                    <TextBox Name="MaxUniqueEntriesTxtBx" HorizontalAlignment="Left" Height="23" Margin="351,172,0,0" TextWrapping="Wrap" Text="25" VerticalAlignment="Top" Width="30" PreviewTextInput="PreviewTextInput"/>
+                    <Label Content="Max Unique Entries:" HorizontalAlignment="Left" Margin="228,168,0,0" VerticalAlignment="Top"/>
                 </Grid>
             </TabItem>
             <TabItem Header="Help" Width="130">

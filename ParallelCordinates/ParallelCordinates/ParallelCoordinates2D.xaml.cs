@@ -20,10 +20,12 @@ namespace ParallelCordinates
     {
         double CalculatedXStep;
 
-        const double MIN_X_STEP = 300;
+        double MinXStep = 300;
+        int StartApproximation = 10;
+        int MaxUniqueEntries = 25;
+
         const double BORDER_DISTANCE = 50;
         const double NUMERIC_POINTS = 5;
-        const double START_APPROXIMATION = 10;
         const double Y_COLUMN_OFFSET = - BORDER_DISTANCE / 2;
         const double TEXT_OFFSET_X = 3;
         const double TEXT_OFFSET_Y = - 25;
@@ -39,22 +41,32 @@ namespace ParallelCordinates
             InitializeComponent();
         }
 
-        public ParallelCoordinates2D(List<DataEntry> userData) 
+        public ParallelCoordinates2D(List<DataEntry> userData, int minColumnWidth, int beginNumericAprox, int maxUniqueEntries) 
         {
             InitializeComponent();
 
-            GraphData = new DisplayData();
-            GraphData.GridData = userData.Where(e => e.UniquEntries <= 25 || e.AllNumbers == true).ToList();
+            MinXStep = minColumnWidth;
+            StartApproximation = beginNumericAprox;
+            MaxUniqueEntries = beginNumericAprox;
 
-            //MessageBoxResult messageBoxResult = System.Windows.MessageBox.Show("Good Columns: " + GraphData.Count(e => e.UniquEntries <= 25 || e.AllNumbers == true).ToString() + " of " + GraphData.Count().ToString(), "Alert", System.Windows.MessageBoxButton.OK);
+            GraphData = new DisplayData();
+            GraphData.GridData = userData.Where(e => e.UniquEntries <= MaxUniqueEntries || e.AllNumbers == true).ToList();
+
+            string[] unusedColumnNames = userData.Where(e => e.UniquEntries > MaxUniqueEntries && e.AllNumbers == false).Select(e => e.ColumnName).ToArray();
+
+            if (unusedColumnNames.Length > 0)
+            {
+                string errorMessage = "The following data column" + (unusedColumnNames.Length > 1 ? "s" : "") + " were removed for having too many unique non-numeric entries: ";
+                string badColumns = string.Join(", ", unusedColumnNames);
+
+                MessageBoxResult messageBoxResult = System.Windows.MessageBox.Show(errorMessage + badColumns, "Invalid Columns", System.Windows.MessageBoxButton.OK);
+            }
 
             canvas.Height = (int)SystemParameters.FullPrimaryScreenHeight;
             canvas.Width = (int)SystemParameters.FullPrimaryScreenWidth;
 
-            //double normalWidth = (2 / (double)GraphData.GridData.Count * canvas.Width) - (1 / (double)GraphData.GridData.Count * canvas.Height);
             double normalWidth = (canvas.Width - BORDER_DISTANCE * 2) / GraphData.GridData.Count;
-            
-            CalculatedXStep = Math.Max(normalWidth, MIN_X_STEP);
+            CalculatedXStep = Math.Max(normalWidth, MinXStep);
             canvas.Width = CalculatedXStep * GraphData.GridData.Count + BORDER_DISTANCE * 2;
 
             // Draw Vertical Lines
@@ -66,7 +78,7 @@ namespace ParallelCordinates
             // Draw Horizontal Lines
             for (int i = 0; i < GraphData.GridData.Count; ++i)
             {
-                if (GraphData.GridData[i].AllNumbers && GraphData.GridData[i].UniquEntries > START_APPROXIMATION)
+                if (GraphData.GridData[i].AllNumbers && GraphData.GridData[i].UniquEntries > StartApproximation)
                 {
                     for (int j = 0; j < NUMERIC_POINTS; ++j)
                     {
@@ -216,7 +228,7 @@ namespace ParallelCordinates
         {
             for (int i = 0; i < GraphData.GridData.Count; ++i)
             {
-                if (GraphData.GridData[i].AllNumbers && GraphData.GridData[i].UniquEntries > START_APPROXIMATION)
+                if (GraphData.GridData[i].AllNumbers && GraphData.GridData[i].UniquEntries > StartApproximation)
                 {
                     for (int j = 0; j < NUMERIC_POINTS; ++j)
                     {
@@ -265,7 +277,7 @@ namespace ParallelCordinates
         Point getDataPointCoordinates(int i, int j)
         {
             // Case: Too many numeric points, so approximation must take place
-            if (GraphData.GridData[j].AllNumbers && GraphData.GridData[j].UniquEntries > START_APPROXIMATION)
+            if (GraphData.GridData[j].AllNumbers && GraphData.GridData[j].UniquEntries > StartApproximation)
             {
                 //  Case: No avalid entry provided
                 if (GraphData.GridData[j].Data[i][0] == '[')
