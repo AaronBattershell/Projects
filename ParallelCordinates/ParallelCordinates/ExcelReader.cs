@@ -83,7 +83,8 @@ namespace DataReader
 
                 for (int j = 0; j < entries.Length; ++j)
                 {
-                    ds[j].Data.Add(entries[j].Replace(",", "").Trim() == "" || entries[j] == null ? "[Not Available]" : entries[j].Replace(",", "").Trim());
+                    string valueToAdd = entries[j].Replace(",", "").Trim() == "" || entries[j] == null ? "[Not Available]" : entries[j].Replace(",", "").Trim();
+                    ds[j].Data.Add(valueToAdd != "-0" ? valueToAdd : "0");
 
                     if (ds[j].Data.Last()[0] == '[')
                     {
@@ -91,8 +92,9 @@ namespace DataReader
                     }
 
                     double parseValue;
-                    string parseStringValue = entries[j].Replace(",", "").Replace("$", "").Trim();
-                    ds[j].AllNumbers = ds[j].AllNumbers && (double.TryParse(parseStringValue, out parseValue) || parseStringValue == "" || (parseStringValue[0] == '[' && parseStringValue[parseStringValue.Length - 1] == ']'));
+                    valueToAdd = valueToAdd.Replace("$", "").Trim();
+
+                    ds[j].AllNumbers = ds[j].AllNumbers && (double.TryParse(valueToAdd, out parseValue) || valueToAdd == "" || (valueToAdd[0] == '[' && valueToAdd[valueToAdd.Length - 1] == ']'));
                 }
             }
 
@@ -147,7 +149,8 @@ namespace DataReader
                             break;
                         }
 
-                        ds[iter].Data.Add(cell == null || cell.Text.Replace(",", "").Trim() == null ? "[Not Available]" : cell.Text.Replace(",", "").Trim());
+                        string valueToAdd = cell == null || cell.Text.Replace(",", "").Trim() == null ? "[Not Available]" : cell.Text.Replace(",", "").Trim();
+                        ds[iter].Data.Add(valueToAdd == "-0" ? "0" : valueToAdd);
 
                         if (ds[iter].Data.Last()[0] == '[')
                         {
@@ -155,8 +158,9 @@ namespace DataReader
                         }
 
                         double parseValue;
-                        string parseStringValue = ds[iter].Data.Last().Replace("$", "").Trim();
-                        ds[iter].AllNumbers = ds[iter].AllNumbers && (double.TryParse(parseStringValue, out parseValue) || parseStringValue == "" || (parseStringValue[0] == '[' && parseStringValue[parseStringValue.Length - 1] == ']'));
+                        valueToAdd = valueToAdd.Replace("$", "").Trim();
+
+                        ds[iter].AllNumbers = ds[iter].AllNumbers && (double.TryParse(valueToAdd, out parseValue) || valueToAdd == "" || (valueToAdd[0] == '[' && valueToAdd[valueToAdd.Length - 1] == ']'));
                         
                         ++iter;
                     }

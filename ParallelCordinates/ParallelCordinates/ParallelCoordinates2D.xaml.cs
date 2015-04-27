@@ -20,9 +20,9 @@ namespace ParallelCordinates
     {
         double CalculatedXStep;
 
-        double MinXStep = 300;
-        int StartApproximation = 10;
-        int MaxUniqueEntries = 25;
+        double MinXStep;
+        int StartApproximation;
+        int MaxUniqueEntries;
 
         const double BORDER_DISTANCE = 50;
         const double NUMERIC_POINTS = 5;
@@ -59,7 +59,7 @@ namespace ParallelCordinates
                 string errorMessage = "The following data column" + (unusedColumnNames.Length > 1 ? "s" : "") + " were removed for having too many unique non-numeric entries: ";
                 string badColumns = string.Join(", ", unusedColumnNames);
 
-                MessageBoxResult messageBoxResult = System.Windows.MessageBox.Show(errorMessage + badColumns, "Invalid Columns", System.Windows.MessageBoxButton.OK);
+                System.Windows.MessageBox.Show(errorMessage + badColumns, "Invalid Columns", System.Windows.MessageBoxButton.OK);
             }
 
             canvas.Height = (int)SystemParameters.FullPrimaryScreenHeight;
@@ -169,27 +169,11 @@ namespace ParallelCordinates
 
         private void mouseDown(object sender, RoutedEventArgs e)
         {
-            Point p = Mouse.GetPosition(canvas);
-            //MessageBoxResult messageBoxResult = System.Windows.MessageBox.Show("Down at column: " + GraphData.GridData[getColumn(p)].ColumnName, "Alert", System.Windows.MessageBoxButton.OK);
-         
             DownMouseColumnIndex = getColumn(Mouse.GetPosition(canvas));
         }
 
         private void mouseUP(object sender, RoutedEventArgs e)
         {
-            Point p = Mouse.GetPosition(canvas);
-
-            if (getBetweenColumns(p) == GraphData.GridData.Count)
-            {
-                //System.Windows.MessageBox.Show("After column: " + GraphData.GridData.Last().ColumnName, "Alert", System.Windows.MessageBoxButton.OK);
-            }
-            else
-            {
-                //MessageBoxResult messageBoxResult = System.Windows.MessageBox.Show("Before: " + GraphData.GridData[getBetweenColumns(p)].ColumnName, "Alert", System.Windows.MessageBoxButton.OK);
-            }
-
-
-
             UpMouseColumnIndex = getBetweenColumns(Mouse.GetPosition(canvas));
 
             if (UpMouseColumnIndex != -1 && DownMouseColumnIndex != -1 && !(UpMouseColumnIndex - 2 < DownMouseColumnIndex && UpMouseColumnIndex + 1 > DownMouseColumnIndex))
@@ -209,12 +193,7 @@ namespace ParallelCordinates
                     GraphData.GridData.Insert(UpMouseColumnIndex, dataHolder);
                 }
 
-                                
-
-
-
                 drawScreen();
-                //System.Windows.MessageBox.Show("Will move: " + GraphData.GridData.Last().ColumnName, "Alert", System.Windows.MessageBoxButton.OK);
             }
 
             UpMouseColumnIndex = -1;
@@ -295,12 +274,10 @@ namespace ParallelCordinates
                 }
                 else
                 {
-                    var uniquValues = GraphData.GridData[i].Data.Distinct().Where(e => e[0] != '[').ToList();
-
-                    for (int j = 0; j < uniquValues.Count; ++j)
+                    foreach (var field in GraphData.GridData[i].YPlacements)
                     {
-                        canvas.Children.Add(DrawLine(new Pen(Brushes.Black, 2), new Point(GraphData.ColumnPositions[i].Top.X - 10, GraphData.GridData[i].YPlacements[uniquValues[j]]), new Point(GraphData.ColumnPositions[i].Top.X + 10, GraphData.GridData[i].YPlacements[uniquValues[j]])));
-                        canvas.Children.Add(DrawText(uniquValues[j], new Point(GraphData.ColumnPositions[i].Top.X - uniquValues[j].Length * TEXT_OFFSET_X, GraphData.GridData[i].YPlacements[uniquValues[j]] + TEXT_OFFSET_Y), Colors.Black));
+                        canvas.Children.Add(DrawLine(new Pen(Brushes.Black, 2), new Point(GraphData.ColumnPositions[i].Top.X - 10, field.Value), new Point(GraphData.ColumnPositions[i].Top.X + 10, field.Value)));
+                        canvas.Children.Add(DrawText(field.Key, new Point(GraphData.ColumnPositions[i].Top.X - field.Key.Length * TEXT_OFFSET_X, field.Value + TEXT_OFFSET_Y), Colors.Black));
                     }
                 }
             }
@@ -310,7 +287,7 @@ namespace ParallelCordinates
         {
             for (int i = 0; i < GraphData.GridData[0].Data.Count; ++i)
             {
-                Point left = getDataPointCoordinates(i, 0);;
+                Point left = getDataPointCoordinates(i, 0);
                 Point right;
 
                 for (int j = 1; j < GraphData.GridData.Count; ++j)

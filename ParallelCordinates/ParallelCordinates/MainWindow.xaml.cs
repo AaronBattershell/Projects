@@ -29,7 +29,7 @@ namespace ParallelCordinates
 
             // Set filter for file extension and default file extension 
             fileSelector.DefaultExt = ".xlsx";
-            fileSelector.Filter = "Excel Files (*.xlsx)|*.xlsx|Excel Files (*.xls)|*.xls|Text Files (*.txt)|*.txt|All File Types (*.*)|*.*";
+            fileSelector.Filter = "Excel Files (*.xlsx)|*.xlsx|Text Files (*.txt)|*.txt|All File Types (*.*)|*.*";
 
             // Get the selected file name and display in a TextBox 
             if ((bool)fileSelector.ShowDialog())
@@ -85,7 +85,7 @@ namespace ParallelCordinates
 
         private void LaunchBtn_Click(object sender, RoutedEventArgs e)
         {
-            if (VisualizationMethod == "2D in 2D")
+            if (VisualizationMethod == "Parallel Coordinates in 2D")
             {
                 ParallelCoordinates2D page = new ParallelCoordinates2D(UserData, Int32.Parse(MinColumnWidthTxtBx.Text), Int32.Parse(BeginNumericAproxTxtBx.Text), Int32.Parse(MaxUniqueEntriesTxtBx.Text));
                 page.Show();
@@ -93,6 +93,10 @@ namespace ParallelCordinates
             else if (VisualizationMethod == "2D in 3D Spiral")
             {
                 FileNameLbl.Content = "2D in 3D Spiral";
+            }
+            else
+            {
+                System.Windows.MessageBox.Show("Error selecting visualization method.", "Unexpected Error", System.Windows.MessageBoxButton.OK);
             }
         }
 
