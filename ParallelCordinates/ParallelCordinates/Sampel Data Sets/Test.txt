@@ -1,0 +1,5 @@
+Name	Age	Gender	Favorite Number	Favorite Phrase
+Jake	22	M	12	Sieze the day!
+Milton	44	M	1	Small Nipper
+Picia	99	F	1.123	Eat My Shorts
+NewGuy	12			Is my gender here?
