@@ -69,13 +69,13 @@ namespace ParallelCordinates
             CalculatedXStep = Math.Max(normalWidth, MinXStep);
             canvas.Width = CalculatedXStep * GraphData.GridData.Count + BORDER_DISTANCE * 2;
 
-            // Draw Vertical Lines
+            // Calculate vertical Lines and text
             for (int i = 0; i < GraphData.GridData.Count; ++i)
             {
                 GraphData.ColumnPositions.Add(new ColumnData(new Point(CalculatedXStep * i + CalculatedXStep / 2 + BORDER_DISTANCE, BORDER_DISTANCE - Y_COLUMN_OFFSET), new Point(CalculatedXStep * i + CalculatedXStep / 2 + BORDER_DISTANCE, canvas.Height - BORDER_DISTANCE - Y_COLUMN_OFFSET)));
             }
 
-            // Draw Horizontal Lines
+            // Calculate horizontal Lines
             for (int i = 0; i < GraphData.GridData.Count; ++i)
             {
                 if (GraphData.GridData[i].AllNumbers && GraphData.GridData[i].UniquEntries > StartApproximation)
@@ -84,19 +84,19 @@ namespace ParallelCordinates
                     {
                         double labelNumber = (j == 0 ? GraphData.GridData[i].NumberRange.First : (j == NUMERIC_POINTS - 1 ? GraphData.GridData[i].NumberRange.Second : (GraphData.GridData[i].NumberRange.Second - GraphData.GridData[i].NumberRange.First) * (j / (double)NUMERIC_POINTS) + GraphData.GridData[i].NumberRange.First));
 
-                        GraphData.ColumnPositions[i].YPlacements[labelNumber.ToString()] = (int)(j / (NUMERIC_POINTS + (GraphData.GridData[i].ContainsEmptyEntry ? 1 : 0)) * (canvas.Height - 2 * BORDER_DISTANCE) + (0.5 / (NUMERIC_POINTS + (GraphData.GridData[i].ContainsEmptyEntry ? 1 : 0)) * (canvas.Height - 2 * BORDER_DISTANCE)) + BORDER_DISTANCE - Y_COLUMN_OFFSET);
+                        GraphData.GridData[i].YPlacements[labelNumber.ToString()] = (int)(j / (NUMERIC_POINTS + (GraphData.GridData[i].ContainsEmptyEntry ? 1 : 0)) * (canvas.Height - 2 * BORDER_DISTANCE) + (0.5 / (NUMERIC_POINTS + (GraphData.GridData[i].ContainsEmptyEntry ? 1 : 0)) * (canvas.Height - 2 * BORDER_DISTANCE)) + BORDER_DISTANCE - Y_COLUMN_OFFSET);
                     }
 
                     if (GraphData.GridData[i].ContainsEmptyEntry)
                     {
-                        GraphData.ColumnPositions[i].YPlacements[EMPTY_FIELD] = (int)((NUMERIC_POINTS) / (NUMERIC_POINTS + (GraphData.GridData[i].ContainsEmptyEntry ? 1 : 0)) * (canvas.Height - 2 * BORDER_DISTANCE) + (0.5 / (NUMERIC_POINTS + (GraphData.GridData[i].ContainsEmptyEntry ? 1 : 0)) * (canvas.Height - 2 * BORDER_DISTANCE)) + BORDER_DISTANCE - Y_COLUMN_OFFSET);
+                        GraphData.GridData[i].YPlacements[EMPTY_FIELD] = (int)((NUMERIC_POINTS) / (NUMERIC_POINTS + (GraphData.GridData[i].ContainsEmptyEntry ? 1 : 0)) * (canvas.Height - 2 * BORDER_DISTANCE) + (0.5 / (NUMERIC_POINTS + (GraphData.GridData[i].ContainsEmptyEntry ? 1 : 0)) * (canvas.Height - 2 * BORDER_DISTANCE)) + BORDER_DISTANCE - Y_COLUMN_OFFSET);
                     }
                 }
                 else
                 {
                     var uniquValues = GraphData.GridData[i].Data.Distinct().Where(e => e[0] != '[').ToList();
 
-                    sortList(uniquValues, GraphData.GridData[i].AllNumbers);
+                    sortList(ref uniquValues, GraphData.GridData[i].AllNumbers);
 
                     if (GraphData.GridData[i].ContainsEmptyEntry)
                     {
@@ -105,7 +105,7 @@ namespace ParallelCordinates
 
                     for (int j = 0; j < uniquValues.Count; ++j)
                     {
-                        GraphData.ColumnPositions[i].YPlacements[uniquValues[j]] = ((int)(j / (double)GraphData.GridData[i].UniquEntries * (canvas.Height - 2 * BORDER_DISTANCE) + (0.5 / (double)GraphData.GridData[i].UniquEntries * (canvas.Height - 2 * BORDER_DISTANCE)) + BORDER_DISTANCE - Y_COLUMN_OFFSET));
+                        GraphData.GridData[i].YPlacements[uniquValues[j]] = ((int)(j / (double)GraphData.GridData[i].UniquEntries * (canvas.Height - 2 * BORDER_DISTANCE) + (0.5 / (double)GraphData.GridData[i].UniquEntries * (canvas.Height - 2 * BORDER_DISTANCE)) + BORDER_DISTANCE - Y_COLUMN_OFFSET));
                     }
                 }
             }
@@ -113,7 +113,7 @@ namespace ParallelCordinates
             drawScreen();
         }
 
-        public void sortList(List<string> values, bool isNumbers = false)
+        public void sortList(ref List<string> values, bool isNumbers = false)
         {
             if (!isNumbers)
             {
@@ -169,23 +169,52 @@ namespace ParallelCordinates
 
         private void mouseDown(object sender, RoutedEventArgs e)
         {
-            //Point p = Mouse.GetPosition(canvas);
+            Point p = Mouse.GetPosition(canvas);
             //MessageBoxResult messageBoxResult = System.Windows.MessageBox.Show("Down at column: " + GraphData.GridData[getColumn(p)].ColumnName, "Alert", System.Windows.MessageBoxButton.OK);
          
-            UpMouseColumnIndex = getColumn(Mouse.GetPosition(canvas));
+            DownMouseColumnIndex = getColumn(Mouse.GetPosition(canvas));
         }
 
         private void mouseUP(object sender, RoutedEventArgs e)
         {
-            //Point p = Mouse.GetPosition(canvas);
-            //MessageBoxResult messageBoxResult = System.Windows.MessageBox.Show("Up at column: " + GraphData.GridData[getColumn(p)].ColumnName, "Alert", System.Windows.MessageBoxButton.OK);
+            Point p = Mouse.GetPosition(canvas);
 
-
-            DownMouseColumnIndex = getColumn(Mouse.GetPosition(canvas));
-
-            if (UpMouseColumnIndex != -1 && UpMouseColumnIndex != -1 && DownMouseColumnIndex != UpMouseColumnIndex)
+            if (getBetweenColumns(p) == GraphData.GridData.Count)
             {
-                // switch indicies
+                //System.Windows.MessageBox.Show("After column: " + GraphData.GridData.Last().ColumnName, "Alert", System.Windows.MessageBoxButton.OK);
+            }
+            else
+            {
+                //MessageBoxResult messageBoxResult = System.Windows.MessageBox.Show("Before: " + GraphData.GridData[getBetweenColumns(p)].ColumnName, "Alert", System.Windows.MessageBoxButton.OK);
+            }
+
+
+
+            UpMouseColumnIndex = getBetweenColumns(Mouse.GetPosition(canvas));
+
+            if (UpMouseColumnIndex != -1 && DownMouseColumnIndex != -1 && !(UpMouseColumnIndex - 2 < DownMouseColumnIndex && UpMouseColumnIndex + 1 > DownMouseColumnIndex))
+            {
+                GraphData.GridData.Last().Data.Last().ToString();
+                var dataHolder = GraphData.GridData[DownMouseColumnIndex];
+
+                GraphData.GridData.RemoveAt(DownMouseColumnIndex);
+
+                if (DownMouseColumnIndex < UpMouseColumnIndex)
+                {
+                    --UpMouseColumnIndex;
+                    GraphData.GridData.Insert(UpMouseColumnIndex, dataHolder);
+                }
+                else
+                {
+                    GraphData.GridData.Insert(UpMouseColumnIndex, dataHolder);
+                }
+
+                                
+
+
+
+                drawScreen();
+                //System.Windows.MessageBox.Show("Will move: " + GraphData.GridData.Last().ColumnName, "Alert", System.Windows.MessageBoxButton.OK);
             }
 
             UpMouseColumnIndex = -1;
@@ -193,7 +222,7 @@ namespace ParallelCordinates
 
         public int getColumn(Point p)
         {
-            for (int i = 0; i < GraphData.GridData.Count - 1; ++i)
+            for (int i = 0; i < GraphData.GridData.Count; ++i)
             {
                 double halfWidth = CalculatedXStep / 2;
 
@@ -204,6 +233,26 @@ namespace ParallelCordinates
             }
 
             return -1;
+        }
+
+        // Returns the column index to the right of your cursor
+        public int getBetweenColumns(Point p)
+        {
+            //Special case: first column
+            if (p.X < GraphData.ColumnPositions[0].Top.X)
+            {
+                return 0;
+            }
+
+            for (int i = 0; i < GraphData.GridData.Count - 1; ++i)
+            {
+                if (GraphData.ColumnPositions[i].Top.X < p.X && p.X < GraphData.ColumnPositions[i + 1].Top.X)
+                {
+                    return i + 1;
+                }
+            }
+
+            return GraphData.GridData.Count;
         }
 
         void drawScreen()
@@ -234,14 +283,14 @@ namespace ParallelCordinates
                     {
                         double labelNumber = (j == 0 ? GraphData.GridData[i].NumberRange.First : (j == NUMERIC_POINTS - 1 ? GraphData.GridData[i].NumberRange.Second : (GraphData.GridData[i].NumberRange.Second - GraphData.GridData[i].NumberRange.First) * (j / (double)NUMERIC_POINTS) + GraphData.GridData[i].NumberRange.First));
 
-                        canvas.Children.Add(DrawLine(new Pen(Brushes.Black, 2), new Point(GraphData.ColumnPositions[i].Top.X - 10, GraphData.ColumnPositions[i].YPlacements[labelNumber.ToString()]), new Point(GraphData.ColumnPositions[i].Top.X + 10, GraphData.ColumnPositions[i].YPlacements[labelNumber.ToString()])));
-                        canvas.Children.Add(DrawText(labelNumber.ToString(), new Point(GraphData.ColumnPositions[i].Top.X - labelNumber.ToString().Length * TEXT_OFFSET_X, GraphData.ColumnPositions[i].YPlacements[labelNumber.ToString()] + TEXT_OFFSET_Y), Colors.Black));
+                        canvas.Children.Add(DrawLine(new Pen(Brushes.Black, 2), new Point(GraphData.ColumnPositions[i].Top.X - 10, GraphData.GridData[i].YPlacements[labelNumber.ToString()]), new Point(GraphData.ColumnPositions[i].Top.X + 10, GraphData.GridData[i].YPlacements[labelNumber.ToString()])));
+                        canvas.Children.Add(DrawText(labelNumber.ToString(), new Point(GraphData.ColumnPositions[i].Top.X - labelNumber.ToString().Length * TEXT_OFFSET_X, GraphData.GridData[i].YPlacements[labelNumber.ToString()] + TEXT_OFFSET_Y), Colors.Black));
                     }
 
                     if (GraphData.GridData[i].ContainsEmptyEntry)
                     {
-                        canvas.Children.Add(DrawLine(new Pen(Brushes.Black, 2), new Point(GraphData.ColumnPositions[i].Top.X - 10, GraphData.ColumnPositions[i].YPlacements[EMPTY_FIELD]), new Point(GraphData.ColumnPositions[i].Top.X + 10, GraphData.ColumnPositions[i].YPlacements[EMPTY_FIELD])));
-                        canvas.Children.Add(DrawText(EMPTY_FIELD, new Point(GraphData.ColumnPositions[i].Top.X - EMPTY_FIELD.ToString().Length * TEXT_OFFSET_X, GraphData.ColumnPositions[i].YPlacements[EMPTY_FIELD] + TEXT_OFFSET_Y), Colors.Black));
+                        canvas.Children.Add(DrawLine(new Pen(Brushes.Black, 2), new Point(GraphData.ColumnPositions[i].Top.X - 10, GraphData.GridData[i].YPlacements[EMPTY_FIELD]), new Point(GraphData.ColumnPositions[i].Top.X + 10, GraphData.GridData[i].YPlacements[EMPTY_FIELD])));
+                        canvas.Children.Add(DrawText(EMPTY_FIELD, new Point(GraphData.ColumnPositions[i].Top.X - EMPTY_FIELD.ToString().Length * TEXT_OFFSET_X, GraphData.GridData[i].YPlacements[EMPTY_FIELD] + TEXT_OFFSET_Y), Colors.Black));
                     }
                 }
                 else
@@ -250,8 +299,8 @@ namespace ParallelCordinates
 
                     for (int j = 0; j < uniquValues.Count; ++j)
                     {
-                        canvas.Children.Add(DrawLine(new Pen(Brushes.Black, 2), new Point(GraphData.ColumnPositions[i].Top.X - 10, GraphData.ColumnPositions[i].YPlacements[uniquValues[j]]), new Point(GraphData.ColumnPositions[i].Top.X + 10, GraphData.ColumnPositions[i].YPlacements[uniquValues[j]])));
-                        canvas.Children.Add(DrawText(uniquValues[j], new Point(GraphData.ColumnPositions[i].Top.X - uniquValues[j].Length * TEXT_OFFSET_X, GraphData.ColumnPositions[i].YPlacements[uniquValues[j]] + TEXT_OFFSET_Y), Colors.Black));
+                        canvas.Children.Add(DrawLine(new Pen(Brushes.Black, 2), new Point(GraphData.ColumnPositions[i].Top.X - 10, GraphData.GridData[i].YPlacements[uniquValues[j]]), new Point(GraphData.ColumnPositions[i].Top.X + 10, GraphData.GridData[i].YPlacements[uniquValues[j]])));
+                        canvas.Children.Add(DrawText(uniquValues[j], new Point(GraphData.ColumnPositions[i].Top.X - uniquValues[j].Length * TEXT_OFFSET_X, GraphData.GridData[i].YPlacements[uniquValues[j]] + TEXT_OFFSET_Y), Colors.Black));
                     }
                 }
             }
@@ -282,7 +331,7 @@ namespace ParallelCordinates
                 //  Case: No avalid entry provided
                 if (GraphData.GridData[j].Data[i][0] == '[')
                 {
-                    return new Point(GraphData.ColumnPositions[j].Top.X, GraphData.ColumnPositions[j].YPlacements[EMPTY_FIELD]);
+                    return new Point(GraphData.ColumnPositions[j].Top.X, GraphData.GridData[j].YPlacements[EMPTY_FIELD]);
                 }
                 else // Case: Approximate location of numeric point
                 {
@@ -290,16 +339,23 @@ namespace ParallelCordinates
                     double range = (GraphData.GridData[j].NumberRange.Second - GraphData.GridData[j].NumberRange.First);
                     double currentValue = Double.Parse(GraphData.GridData[j].Data[i]);
                     double heightPercentage = (currentValue - GraphData.GridData[j].NumberRange.First) / range;
-                    double heightDistance = GraphData.ColumnPositions[j].YPlacements[GraphData.GridData[j].NumberRange.Second.ToString()] - GraphData.ColumnPositions[j].YPlacements[GraphData.GridData[j].NumberRange.First.ToString()];
-                    double YVal = heightPercentage * heightDistance + GraphData.ColumnPositions[j].YPlacements[GraphData.GridData[j].NumberRange.First.ToString()];
+                    double heightDistance = GraphData.GridData[j].YPlacements[GraphData.GridData[j].NumberRange.Second.ToString()] - GraphData.GridData[j].YPlacements[GraphData.GridData[j].NumberRange.First.ToString()];
+                    double YVal = heightPercentage * heightDistance + GraphData.GridData[j].YPlacements[GraphData.GridData[j].NumberRange.First.ToString()];
                     return new Point(GraphData.ColumnPositions[j].Top.X, YVal);
                 }
             }
             else // Case: No approximations needed 
             {
                 string currentField = (GraphData.GridData[j].Data[i][0] == '[' ? EMPTY_FIELD : GraphData.GridData[j].Data[i]);
-                return new Point(GraphData.ColumnPositions[j].Top.X, GraphData.ColumnPositions[j].YPlacements[currentField]);
+                return new Point(GraphData.ColumnPositions[j].Top.X, GraphData.GridData[j].YPlacements[currentField]);
             }
+        }
+
+        static void swap<T>(ref T left, ref T right)
+        {
+            T temp = left;
+            left = right;
+            right = temp;
         }
     }
 
@@ -319,10 +375,10 @@ namespace ParallelCordinates
     {
         public ColumnData()
         {
-            YPlacements = new Dictionary<string, int>();
+
         }
 
-        public ColumnData(Point top, Point botumn) : this()
+        public ColumnData(Point top, Point botumn)
         {
             Top = top;
             Botumn = botumn;
@@ -330,6 +386,5 @@ namespace ParallelCordinates
 
         public Point Top { get; set; }
         public Point Botumn { get; set; }
-        public Dictionary<string, int> YPlacements { get; set; }
     }
 }

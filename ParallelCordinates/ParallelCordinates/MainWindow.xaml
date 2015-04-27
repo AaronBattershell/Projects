@@ -26,26 +26,45 @@
                     <Button Name="DataInterpretationBtn" Content="View Data Interpretation" HorizontalAlignment="Left" Margin="331,30,0,0" IsEnabled="False" VerticalAlignment="Top" Width="141" Click="DisplayData"/>
 
                     <Label Content="Visualization Method" HorizontalAlignment="Left" Margin="9,86,0,0" VerticalAlignment="Top" Width="140" FontSize="14"/>
-                    <RadioButton Content="2D in 2D" HorizontalAlignment="Left" Margin="43,120,0,0" VerticalAlignment="Top" IsChecked="True" Checked="CheckBox_Checked" Width="94" Height="19"/>
-                    <RadioButton Content="2D in 3D Spiral"  HorizontalAlignment="Left" Margin="43,146,0,0" VerticalAlignment="Top" Checked="CheckBox_Checked" Width="107" Height="19" IsEnabled="False"/>
+                    <RadioButton Content="Parallel Coordinates in 2D" HorizontalAlignment="Left" Margin="43,120,0,0" VerticalAlignment="Top" IsChecked="True" Checked="CheckBox_Checked" Width="161" Height="19"/>
+                    <!--RadioButton Content="Parallel Coordinates in 3D Spiral"  HorizontalAlignment="Left" Margin="43,146,0,0" VerticalAlignment="Top" Checked="CheckBox_Checked" Width="199" Height="19" IsEnabled="False"/-->
                     <Button Name="LaunchBtn" Content="Launch Visualization" HorizontalAlignment="Left" Margin="43,219,0,0" VerticalAlignment="Top" Width="399" Height="22" IsEnabled="False" Click="LaunchBtn_Click"/>
-                    <Label Content="Visualization Constraints" HorizontalAlignment="Left" Margin="199,86,0,0" VerticalAlignment="Top" Width="180" FontSize="14"/>
-                    <TextBox Name="MinColumnWidthTxtBx" HorizontalAlignment="Left" Height="23" Margin="351,119,0,0" TextWrapping="Wrap" Text="300" VerticalAlignment="Top" Width="30" PreviewTextInput="PreviewTextInput"/>
-                    <Label Content="Min Column Width: " HorizontalAlignment="Left" Margin="228,115,0,0" VerticalAlignment="Top"/>
-                    <Label Content="px" HorizontalAlignment="Left" Margin="377,115,0,0" VerticalAlignment="Top" Width="22" />
-                    <TextBox Name="BeginNumericAproxTxtBx" HorizontalAlignment="Left" Height="23" Margin="351,145,0,0" TextWrapping="Wrap" Text="10" VerticalAlignment="Top" Width="30" PreviewTextInput="PreviewTextInput"/>
-                    <Label Content="Begin Numeric Aprox:" HorizontalAlignment="Left" Margin="228,141,0,0" VerticalAlignment="Top"/>
-                    <TextBox Name="MaxUniqueEntriesTxtBx" HorizontalAlignment="Left" Height="23" Margin="351,172,0,0" TextWrapping="Wrap" Text="25" VerticalAlignment="Top" Width="30" PreviewTextInput="PreviewTextInput"/>
-                    <Label Content="Max Unique Entries:" HorizontalAlignment="Left" Margin="228,168,0,0" VerticalAlignment="Top"/>
+                    <Label Content="Visualization Constraints" HorizontalAlignment="Left" Margin="239,86,0,0" VerticalAlignment="Top" Width="180" FontSize="14"/>
+                    <TextBox Name="MinColumnWidthTxtBx" HorizontalAlignment="Left" Height="23" Margin="391,119,0,0" TextWrapping="Wrap" Text="300" VerticalAlignment="Top" Width="30" PreviewTextInput="PreviewTextInput" LostFocus="ValidateCount"/>
+                    <Label Content="Min Column Width: " HorizontalAlignment="Left" Margin="268,115,0,0" VerticalAlignment="Top"/>
+                    <Label Content="px" HorizontalAlignment="Left" Margin="417,115,0,0" VerticalAlignment="Top" Width="22" />
+                    <TextBox Name="BeginNumericAproxTxtBx" HorizontalAlignment="Left" Height="23" Margin="391,145,0,0" TextWrapping="Wrap" Text="10" VerticalAlignment="Top" Width="30" PreviewTextInput="PreviewTextInput" LostFocus="ValidateCount"/>
+                    <Label Content="Begin Numeric Aprox:" HorizontalAlignment="Left" Margin="268,141,0,0" VerticalAlignment="Top"/>
+                    <TextBox Name="MaxUniqueEntriesTxtBx" HorizontalAlignment="Left" Height="23" Margin="391,172,0,0" TextWrapping="Wrap" Text="25" VerticalAlignment="Top" Width="30" PreviewTextInput="PreviewTextInput" LostFocus="ValidateCount"/>
+                    <Label Content="Max Unique Entries:" HorizontalAlignment="Left" Margin="268,168,0,0" VerticalAlignment="Top"/>
                 </Grid>
             </TabItem>
             <TabItem Header="Help" Width="130">
                 <Grid Background="#FFE5E5E5">
-                    <TextBlock HorizontalAlignment="Left"
-                		Margin="10,10,0,0"
-                		TextWrapping="Wrap"
-                		VerticalAlignment="Top"
-                		Width="471" Height="247"><Run Text="Accepted Data Input Formats"/><LineBreak/><Run Text="        .xlsx"/><Run Text=" .txt"/><LineBreak/><Run/><LineBreak/><Run Text="Expected File Format"/><LineBreak/><Run Text="        .xlsx"/><LineBreak/><Run Text="                Beginning at cell A1, fill row 1 with attribute fields, one per cell. Every"/><LineBreak/><Run Text="                subsequent row is a single data entry."/><LineBreak/><Run Text="        .txt"/><LineBreak/><Run Text="                Every line in the text file is one full data entry. Entry data fields are delimited"/><LineBreak/><Run Text="                by a single tab character. If there is no value for a field, simply enter another"/><LineBreak/><Run Text="                tab and begin entering the next data field."/><LineBreak/><Run/><LineBreak/><Run Text="View Data Interpretation"/><LineBreak/><Run Text="        This feature displays up to the first 21 entries of your data to verify the provided"/><LineBreak/><Run Text="        input file was parsed correctly. "/></TextBlock>
+                    <TabControl HorizontalAlignment="Left"
+		                Height="261"
+		                Margin="4,3,0,0"
+		                VerticalAlignment="Top"
+		                Width="479">
+                        <TabItem Header="File Input" Width="130">
+                            <Grid Background="#FFE5E5E5">
+                                <TextBlock HorizontalAlignment="Left"
+                		            Margin="7,2,0,0"
+                		            TextWrapping="Wrap"
+                		            VerticalAlignment="Top"
+                		            Width="462" Height="227"><Run Text="Accepted Data Input Formats"/><LineBreak/><Run Text="        .xlsx"/><Run Text=" .txt"/><LineBreak/><Run/><LineBreak/><Run Text="Expected File Format"/><LineBreak/><Run Text="        .xlsx"/><LineBreak/><Run Text="                Beginning at cell A1, fill row 1 with attribute fields, one per cell. Every"/><LineBreak/><Run Text="                subsequent row is a single data entry."/><LineBreak/><Run Text="        .txt"/><LineBreak/><Run Text="                Every line in the text file is one full data entry. Entry data fields are delimited"/><LineBreak/><Run Text="                by a single tab character. If there is no value for a field, simply enter another"/><LineBreak/><Run Text="                tab and begin entering the next data field."/><LineBreak/><Run Text="General"/><LineBreak/><Run Text="        Empty data entries will be replaced with [Not Available]. Additionally, if a data"/><LineBreak/><Run Text="        entries are surrounded by [] characters it will be treated as an empty data filed."/></TextBlock>
+                            </Grid>
+                        </TabItem>
+                        <TabItem Header="Features" Width="130">
+                            <Grid Background="#FFE5E5E5">
+                                <TextBlock HorizontalAlignment="Left"
+                            		Margin="7,2,0,0"
+                            		TextWrapping="Wrap"
+                            		VerticalAlignment="Top"
+                            		Width="462" Height="227"><Run Text="View Data Interpretation"/><LineBreak/><Run Text="        This feature displays up to the first 21 entries of your data to verify the provided"/><LineBreak/><Run Text="        input file was parsed correctly. "/><LineBreak/><Run Text="Parallel Coordinates in 2D"/><LineBreak/><Run Text="        A method of viewing data in two dimensions. Note that for each column there"/><LineBreak/><Run Text="        is the ability to click on it and drag it to a new location, inserting it"/><LineBreak/><Run Text="        between the columns the mouse up event occurs between."/><LineBreak/><Run Text="Input Arguments"/><LineBreak/><Run Text="&#x9;Min Column Width: Define the minimum number of pixels between columns."/><LineBreak/><Run Text="&#x9;Max Unique Entries: Columns with more than this number of unique entries"/><LineBreak/><Run Text="                       are filtered out.   "/><LineBreak/><Run Text="&#x9;Begin Numeric Aprox: If a column containing only numeric or empty"/><LineBreak/><Run Text="                       values exceeds this number, than points are not directly mapped to this"/><LineBreak/><Run Text="                       column but rather approximated based on the range of its extremes. "/><LineBreak/><Run Text="&#x9; "/><LineBreak/><Run Text="&#x9;"/></TextBlock>
+                            </Grid>
+                        </TabItem>
+                    </TabControl>
                 </Grid>
             </TabItem>
             <TabItem Header="About" Width="130px">

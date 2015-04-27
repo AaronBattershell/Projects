@@ -30,6 +30,7 @@ namespace DataReader
             AllNumbers = true;
             UniquEntries = -1;
             ContainsEmptyEntry = false;
+            YPlacements = new Dictionary<string, int>();
         }
 
         public string ColumnName;
@@ -40,6 +41,8 @@ namespace DataReader
 
         public bool AllNumbers;
         public Pair<double, double> NumberRange;
+
+        public Dictionary<string, int> YPlacements { get; set; }
     }
 
     public class ExcelReader

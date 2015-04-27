@@ -96,10 +96,32 @@ namespace ParallelCordinates
             }
         }
 
-        public void PreviewTextInput(object sender, TextCompositionEventArgs e)
+        private void PreviewTextInput(object sender, TextCompositionEventArgs e)
         {
             int val;
             e.Handled = !Int32.TryParse(e.Text, out val); 
+        }
+
+        private void ValidateCount(object sender, RoutedEventArgs e)
+        {
+            // Fill textboxes is empty
+            if (BeginNumericAproxTxtBx.Text == "")
+            {
+                BeginNumericAproxTxtBx.Text = "10";
+            }
+
+            if (MaxUniqueEntriesTxtBx.Text == "")
+            {
+                MaxUniqueEntriesTxtBx.Text = "25";
+            }
+
+            if (MinColumnWidthTxtBx.Text == "")
+            {
+                MinColumnWidthTxtBx.Text = "300";
+            }
+
+            // Ensure NumericAproximation is not greater than total unique
+            BeginNumericAproxTxtBx.Text = (Int32.Parse(BeginNumericAproxTxtBx.Text) > Int32.Parse(MaxUniqueEntriesTxtBx.Text) ? MaxUniqueEntriesTxtBx.Text : BeginNumericAproxTxtBx.Text);
         }
     }
 }
