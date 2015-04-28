@@ -26,10 +26,12 @@ namespace DataReader
         {
             this.ColumnName = ColumnName;
             Data = new List<string>();
+            DisplayFilter = new Pair<double, double>(-1, -1);
             NumberRange = new Pair<double, double>(-1, -1);
             AllNumbers = true;
             UniquEntries = -1;
             ContainsEmptyEntry = false;
+            Filtered = false;
             YPlacements = new Dictionary<string, int>();
         }
 
@@ -41,6 +43,9 @@ namespace DataReader
 
         public bool AllNumbers;
         public Pair<double, double> NumberRange;
+
+        public bool Filtered;
+        public Pair<double, double> DisplayFilter;
 
         public Dictionary<string, int> YPlacements { get; set; }
     }

@@ -49,6 +49,8 @@ namespace ParallelCordinates
             StartApproximation = beginNumericAprox;
             MaxUniqueEntries = beginNumericAprox;
 
+            DateTime LastClick = DateTime.Now;
+
             GraphData = new DisplayData();
             GraphData.GridData = userData.Where(e => e.UniquEntries <= MaxUniqueEntries || e.AllNumbers == true).ToList();
 
@@ -169,12 +171,45 @@ namespace ParallelCordinates
 
         private void mouseDown(object sender, RoutedEventArgs e)
         {
-            DownMouseColumnIndex = getColumn(Mouse.GetPosition(canvas));
+            Point downClick = Mouse.GetPosition(canvas);
+
+            DownMouseColumnIndex = getColumn(downClick);
+            GraphData.GridData[DownMouseColumnIndex].DisplayFilter.First = downClick.X; 
         }
 
         private void mouseUP(object sender, RoutedEventArgs e)
         {
-            UpMouseColumnIndex = getBetweenColumns(Mouse.GetPosition(canvas));
+            // Check for column click
+            Point upClick = Mouse.GetPosition(canvas);
+
+            int upMouseColumnClick = getColumn(upClick);
+            if (upMouseColumnClick == DownMouseColumnIndex)
+            {
+                // Add filter for column
+                if (GraphData.GridData[upMouseColumnClick].DisplayFilter.Second == -1)
+                {
+                    // Assign lowest to first, heighest to second
+                    GraphData.GridData[upMouseColumnClick].DisplayFilter.Second = Math.Max(upClick.Y, GraphData.GridData[upMouseColumnClick].DisplayFilter.First);
+                    GraphData.GridData[upMouseColumnClick].DisplayFilter.First = Math.Min(upClick.Y, GraphData.GridData[upMouseColumnClick].DisplayFilter.First);
+
+                    // FILTER CONSTRAINTS BASED UPON RESTRICTIONS
+                    setFilters();
+                }
+                else // remove data filter for column
+                {
+                    GraphData.GridData[upMouseColumnClick].DisplayFilter.First = -1;
+                    GraphData.GridData[upMouseColumnClick].DisplayFilter.Second = -1;
+                    
+                    // FREE ALL CONSTRAINTS BASED UPON LESSENED RESTRICTIONS
+                    setFilters();
+                }
+
+                return;
+            }
+
+
+            // Check for column drag
+            UpMouseColumnIndex = getBetweenColumns(upClick);
 
             if (UpMouseColumnIndex != -1 && DownMouseColumnIndex != -1 && !(UpMouseColumnIndex - 2 < DownMouseColumnIndex && UpMouseColumnIndex + 1 > DownMouseColumnIndex))
             {
@@ -197,6 +232,39 @@ namespace ParallelCordinates
             }
 
             UpMouseColumnIndex = -1;
+        }
+
+        private void setFilters()
+        {
+            for (int i = 0; i < GraphData.GridData.Count; ++i)
+            {
+                GraphData.GridData[i].Filtered = false;
+
+                for (int j = 0; j < GraphData.GridData[i].Data.Count; ++j)
+                {
+                    if (GraphData.GridData[i].DisplayFilter.First == -1 && GraphData.GridData[i].DisplayFilter.Second == -1)
+                    {
+                        continue;
+                    }
+
+                    // Estimate
+                    if (GraphData.GridData[i].AllNumbers && GraphData.GridData[i].UniquEntries > StartApproximation)
+                    {
+                        //todo: filter out aproximated columns
+                        adsfsdgdfg
+                    }
+                    else // Non-estimate
+                    {
+                        double comparableValueHeight = GraphData.GridData[i].YPlacements[GraphData.GridData[i].Data[j]];
+                        if (GraphData.GridData[i].DisplayFilter.First > comparableValueHeight || comparableValueHeight > GraphData.GridData[i].DisplayFilter.Second)
+                        {
+                            GraphData.GridData[i].Filtered = true;
+                            break;
+                        }
+                    }
+
+                }
+            }
         }
 
         public int getColumn(Point p)
@@ -249,6 +317,12 @@ namespace ParallelCordinates
             {
                 canvas.Children.Add(DrawLine(new Pen(Brushes.DarkSalmon, 1), GraphData.ColumnPositions[i].Top, GraphData.ColumnPositions[i].Botumn));
                 canvas.Children.Add(DrawText(GraphData.GridData[i].ColumnName, new Point(GraphData.ColumnPositions[i].Top.X - GraphData.GridData[i].ColumnName.Length * TEXT_OFFSET_X, -Y_COLUMN_OFFSET / 2 + (CalculatedXStep < 150 ? (i % 3) * 20 : 0)), Colors.Black));
+
+                if (GraphData.GridData[i].Filtered)
+                {
+                    // todo: Add rectangle
+                    canvas.Children.Adda sdfasdfasd
+                }
             }
         }
 
@@ -294,7 +368,8 @@ namespace ParallelCordinates
                 {
                     right = getDataPointCoordinates(i, j);
 
-                    canvas.Children.Add(DrawLine(new Pen(Brushes.Gray, .5), left, right));
+                    // May need to change j indicie
+                    canvas.Children.Add(DrawLine(new Pen((GraphData.GridData[j].Filtered ? Brushes.DarkGray : Brushes.LightGray), .5), left, right));
                     left = right;
                 }
             }
