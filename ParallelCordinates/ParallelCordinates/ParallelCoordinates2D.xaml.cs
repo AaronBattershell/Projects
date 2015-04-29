@@ -205,7 +205,7 @@ namespace ParallelCordinates
             if (upMouseColumnClick == DownMouseColumnIndex)
             {
                 // Add filter for column
-                if (GraphData.GridData[upMouseColumnClick].DisplayFilter.Second == -1)
+                if (GraphData.GridData[upMouseColumnClick].DisplayFilter.Second == -1 && Math.Abs(GraphData.GridData[DownMouseColumnIndex].DisplayFilter.First - upClick.Y) >= 5)
                 {
                     // Assign lowest to first, heighest to second
                     GraphData.GridData[upMouseColumnClick].DisplayFilter.Second = Math.Max(upClick.Y, GraphData.GridData[upMouseColumnClick].DisplayFilter.First);
