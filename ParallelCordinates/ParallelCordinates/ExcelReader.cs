@@ -31,7 +31,6 @@ namespace DataReader
             AllNumbers = true;
             UniquEntries = -1;
             ContainsEmptyEntry = false;
-            Filtered = false;
             YPlacements = new Dictionary<string, int>();
         }
 
