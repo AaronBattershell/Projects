@@ -87,7 +87,7 @@ namespace ParallelCordinates
         {
             if (VisualizationMethod == "Parallel Coordinates in 2D")
             {
-                ParallelCoordinates2D page = new ParallelCoordinates2D(UserData, Int32.Parse(MinColumnWidthTxtBx.Text), Int32.Parse(BeginNumericAproxTxtBx.Text), Int32.Parse(MaxUniqueEntriesTxtBx.Text));
+                ParallelCoordinates2D page = new ParallelCoordinates2D(UserData, Int32.Parse(MinColumnWidthTxtBx.Text), Int32.Parse(BeginNumericAproxTxtBx.Text), Int32.Parse(MaxUniqueEntriesTxtBx.Text), (bool)FilterTxtBx.IsChecked);
                 page.Show();
             }
             else if (VisualizationMethod == "2D in 3D Spiral")

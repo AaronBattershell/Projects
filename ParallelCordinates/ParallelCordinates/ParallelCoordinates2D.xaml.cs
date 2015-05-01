@@ -23,6 +23,7 @@ namespace ParallelCordinates
         double MinXStep;
         int StartApproximation;
         int MaxUniqueEntries;
+        bool HideFiltered;
 
         const double BORDER_DISTANCE = 50;
         const double NUMERIC_POINTS = 5;
@@ -43,11 +44,12 @@ namespace ParallelCordinates
             InitializeComponent();
         }
 
-        public ParallelCoordinates2D(List<DataEntry> userData, int minColumnWidth, int beginNumericAprox, int maxUniqueEntries) : this()
+        public ParallelCoordinates2D(List<DataEntry> userData, int minColumnWidth, int beginNumericAprox, int maxUniqueEntries, bool hideFiltered) : this()
         {
             MinXStep = minColumnWidth;
             StartApproximation = beginNumericAprox;
             MaxUniqueEntries = beginNumericAprox;
+            HideFiltered = hideFiltered;
 
             GraphData = new DisplayData();
             GraphData.GridData = userData.Where(e => e.UniquEntries <= MaxUniqueEntries || e.AllNumbers == true).ToList();
@@ -366,15 +368,18 @@ namespace ParallelCordinates
         {
             for (int i = 0; i < GraphData.GridData[0].Data.Count; ++i)
             {
-                Point left = getDataPointCoordinates(i, 0);
-                Point right;
-
-                for (int j = 1; j < GraphData.GridData.Count; ++j)
+                if (!FilteredList[i] || !HideFiltered) 
                 {
-                    right = getDataPointCoordinates(i, j);
+                    Point left = getDataPointCoordinates(i, 0);
+                    Point right;
 
-                    canvas.Children.Add(DrawLine(new Pen((FilteredList[i] ? Brushes.LightGray : Brushes.DarkBlue), .5), left, right));
-                    left = right;
+                    for (int j = 1; j < GraphData.GridData.Count; ++j)
+                    {
+                        right = getDataPointCoordinates(i, j);
+
+                        canvas.Children.Add(DrawLine(new Pen((FilteredList[i] ? Brushes.LightGray : Brushes.DarkBlue), .5), left, right));
+                        left = right;
+                    }
                 }
             }
         }
