@@ -36,7 +36,7 @@ namespace ParallelCordinates
         int UpMouseColumnIndex = -1;
 
         List<bool> FilteredList;
-        List<DataEntry> OriginalDataList;
+        //List<DataEntry> OriginalDataList;
 
         Border settingsGrid;
         Button settingsBtn;
@@ -49,7 +49,7 @@ namespace ParallelCordinates
 
         public ParallelCoordinates2D(List<DataEntry> userData, int minColumnWidth, int beginNumericAprox, int maxUniqueEntries, bool hideFiltered) : this()
         {
-            OriginalDataList = userData;
+            //OriginalDataList = userData;
             settingsGrid = defaultSettingsGrid;
             settingsBtn = defaultSettingsBtn;
 
@@ -442,14 +442,14 @@ namespace ParallelCordinates
 
         private void ApplyChanges(object sender, RoutedEventArgs e)
         {
-            if (MinXStep != Int32.Parse(MinColumnWidthTxtBx.Text) || StartApproximation != Int32.Parse(BeginNumericAproxTxtBx.Text) || MaxUniqueEntries != Int32.Parse(MaxUniqueEntriesTxtBx.Text))
+            if (MinXStep != Int32.Parse(MinColumnWidthTxtBx.Text) || StartApproximation != Int32.Parse(BeginNumericAproxTxtBx.Text)/* || MaxUniqueEntries != Int32.Parse(MaxUniqueEntriesTxtBx.Text)*/)
             {
                 MinXStep = Int32.Parse(MinColumnWidthTxtBx.Text);
                 StartApproximation = Int32.Parse(BeginNumericAproxTxtBx.Text);
-                MaxUniqueEntries = Int32.Parse(MaxUniqueEntriesTxtBx.Text);
+                //MaxUniqueEntries = Int32.Parse(MaxUniqueEntriesTxtBx.Text);
                 
                 // START NEW CHANGES
-                GraphData.GridData = OriginalDataList.Where(ee => ee.UniquEntries <= MaxUniqueEntries || ee.AllNumbers == true).ToList();
+                //GraphData.GridData = OriginalDataList.Where(ee => ee.UniquEntries <= MaxUniqueEntries || ee.AllNumbers == true).ToList();
                 FilteredList = new List<bool>(new bool[GraphData.GridData[0].Data.Count]);
 
                 canvas.Width = (int)SystemParameters.FullPrimaryScreenWidth;
@@ -515,7 +515,7 @@ namespace ParallelCordinates
             settingsGrid.Visibility = Visibility.Visible;
 
             MinColumnWidthTxtBx.Text = MinXStep.ToString();
-            MaxUniqueEntriesTxtBx.Text = MaxUniqueEntries.ToString();
+            //MaxUniqueEntriesTxtBx.Text = MaxUniqueEntries.ToString();
             BeginNumericAproxTxtBx.Text = StartApproximation.ToString();
             FilterTxtBx.IsChecked = HideFiltered;
         }
@@ -534,10 +534,10 @@ namespace ParallelCordinates
                 BeginNumericAproxTxtBx.Text = "10";
             }
 
-            if (MaxUniqueEntriesTxtBx.Text == "")
+            /*if (MaxUniqueEntriesTxtBx.Text == "")
             {
                 MaxUniqueEntriesTxtBx.Text = "25";
-            }
+            }*/
 
             if (MinColumnWidthTxtBx.Text == "")
             {
@@ -545,7 +545,7 @@ namespace ParallelCordinates
             }
 
             // Ensure NumericAproximation is not greater than total unique
-            BeginNumericAproxTxtBx.Text = (Int32.Parse(BeginNumericAproxTxtBx.Text) > Int32.Parse(MaxUniqueEntriesTxtBx.Text) ? MaxUniqueEntriesTxtBx.Text : BeginNumericAproxTxtBx.Text);
+            //BeginNumericAproxTxtBx.Text = (Int32.Parse(BeginNumericAproxTxtBx.Text) > Int32.Parse(MaxUniqueEntriesTxtBx.Text) ? MaxUniqueEntriesTxtBx.Text : BeginNumericAproxTxtBx.Text);
         }
     }
 
