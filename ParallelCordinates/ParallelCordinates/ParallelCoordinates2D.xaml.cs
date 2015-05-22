@@ -547,6 +547,15 @@ namespace ParallelCordinates
             // Ensure NumericAproximation is not greater than total unique
             //BeginNumericAproxTxtBx.Text = (Int32.Parse(BeginNumericAproxTxtBx.Text) > Int32.Parse(MaxUniqueEntriesTxtBx.Text) ? MaxUniqueEntriesTxtBx.Text : BeginNumericAproxTxtBx.Text);
         }
+
+        public void onScrollMove(object sender, RoutedEventArgs e)
+        {
+            UIElement canvasContainer = VisualTreeHelper.GetParent(canvas) as UIElement;
+            Point relativeLocation = canvas.TranslatePoint(new Point(0, 0), canvasContainer);
+
+            settingsGrid.Margin = new Thickness(-relativeLocation.X + 10, 10, 0, 0);
+            settingsBtn.Margin = new Thickness(-relativeLocation.X + 10, 10, 0, 0);
+        }
     }
 
     public class DisplayData
